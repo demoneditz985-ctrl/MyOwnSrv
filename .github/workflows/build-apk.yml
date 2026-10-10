@@ -1,5 +1,8 @@
 name: Build Shadow Modz APK
 
+permissions:
+  contents: write
+
 on:
   push:
     paths:
@@ -41,10 +44,14 @@ jobs:
           ln -sfn imgui /tmp/vmbuild/jni/ImGui
           # keep the wildcard *.c* in Android.mk from compiling the .bak copy
           rm -f /tmp/vmbuild/jni/Main.cpp.bak
-          "$NDK/ndk-build" -j4 \
+          if ! "$NDK/ndk-build" -j4 \
               NDK_PROJECT_PATH=/tmp/vmbuild \
               APP_BUILD_SCRIPT=/tmp/vmbuild/jni/Android.mk \
-              NDK_APPLICATION_MK=/tmp/vmbuild/jni/Application.mk
+              NDK_APPLICATION_MK=/tmp/vmbuild/jni/Application.mk \
+              > /tmp/ndkbuild.log 2>&1; then
+            echo "===== ndk-build FAILED ====="; tail -60 /tmp/ndkbuild.log; exit 1
+          fi
+          tail -20 /tmp/ndkbuild.log
           ls -la /tmp/vmbuild/libs/arm64-v8a /tmp/vmbuild/libs/armeabi-v7a
           mkdir -p "$MAIN/libs/arm64-v8a" "$MAIN/libs/armeabi-v7a"
           cp /tmp/vmbuild/libs/arm64-v8a/libVM.so   "$MAIN/libs/arm64-v8a/"
@@ -84,6 +91,17 @@ jobs:
           "$BT/apksigner" verify --verbose ShadowModz.apk
           "$BT/aapt" dump badging ShadowModz.apk | head -8
           unzip -l ShadowModz.apk
+
+      - name: Publish build log on failure
+        if: failure()
+        run: |
+          mkdir -p ci-logs
+          cp /tmp/ndkbuild.log ci-logs/ 2>/dev/null || true
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git add -f ci-logs
+          git commit -q -m "ci: publish build log [skip ci]" || echo "no log to commit"
+          git push origin "HEAD:${{ github.ref_name }}" || true
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
