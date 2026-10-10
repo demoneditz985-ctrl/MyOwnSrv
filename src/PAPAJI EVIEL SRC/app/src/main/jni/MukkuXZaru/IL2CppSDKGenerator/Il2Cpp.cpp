@@ -7,6 +7,10 @@
 
 #define g_LogTag "AnekoCheat"
 
+#include <cstring>
+
+bool g_il2cppReady = false;
+
 typedef unsigned short UTF16;
 typedef wchar_t UTF32;
 typedef char UTF8;
@@ -53,7 +57,10 @@ UTF32 surrogate_to_utf32(UTF16 high, UTF16 low) {
 const char* utf16_to_utf8(const UTF16* source, size_t len) {
     std::u16string s(source, source + len);
     std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-    return convert.to_bytes(s).c_str();
+    std::string tmp = convert.to_bytes(s);
+    char* out = new char[tmp.size() + 1];
+    memcpy(out, tmp.data(), tmp.size() + 1);
+    return out;
 }
 
 const wchar_t* utf16_to_utf32(const UTF16* source, size_t len) {
@@ -93,6 +100,7 @@ Il2CppString *Il2CppString::Create(const wchar_t *s, int len) {
 }
 
 void *Il2CppGetImageByName(const char *image) {
+	if (!g_il2cppReady) return 0;
 	size_t size;
 	void **assemblies = il2cpp_domain_get_assemblies(il2cpp_domain_get(), &size);
 	for(int i = 0; i < size; ++i) {
@@ -332,5 +340,9 @@ void Il2CppAttach(const char *name) {
     il2cpp_class_get_methods = (void *(*)(void *, void **)) xdl_sym(handle, "il2cpp_class_get_methods",0);
     il2cpp_method_get_name = (const char *(*)(void *)) xdl_sym(handle, "il2cpp_method_get_name",0);
     il2cpp_object_new = (void *(*)(void *)) xdl_sym(handle, "il2cpp_object_new",0);
+    g_il2cppReady = (il2cpp_assembly_get_image && il2cpp_domain_get && il2cpp_domain_get_assemblies
+        && il2cpp_image_get_name && il2cpp_class_from_name && il2cpp_class_get_field_from_name
+        && il2cpp_class_get_method_from_name && il2cpp_field_get_offset && il2cpp_type_get_name
+        && il2cpp_method_get_param && il2cpp_class_get_methods && il2cpp_method_get_name);
     xdl_close(handle);
 }
