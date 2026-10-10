@@ -1,0 +1,92 @@
+name: Build Shadow Modz APK
+
+on:
+  push:
+    paths:
+      - 'src/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install pinned NDK and build-tools
+        run: |
+          SDK="$ANDROID_HOME"
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK" \
+              "ndk;25.2.9519653" "build-tools;34.0.0" > /dev/null
+          echo "NDK=$SDK/ndk/25.2.9519653" >> "$GITHUB_ENV"
+          echo "BT=$SDK/build-tools/34.0.0"  >> "$GITHUB_ENV"
+
+      - name: Build native libVM.so (both ABIs)
+        run: |
+          set -e
+          MAIN="src/PAPAJI EVIEL SRC/app/src/main"
+          # ndk-build/make choke on spaces ("PAPAJI EVIEL SRC"), so build from
+          # a space-free copy of the jni tree.
+          rm -rf /tmp/vmbuild && mkdir -p /tmp/vmbuild
+          cp -r "$MAIN/jni" /tmp/vmbuild/jni
+          # CI runners are case-sensitive: Main.cpp includes "ImGui/Toggle.h"
+          # but the folder on disk is lowercase "imgui".
+          ln -sfn imgui /tmp/vmbuild/jni/ImGui
+          # keep the wildcard *.c* in Android.mk from compiling the .bak copy
+          rm -f /tmp/vmbuild/jni/Main.cpp.bak
+          "$NDK/ndk-build" -j4 \
+              NDK_PROJECT_PATH=/tmp/vmbuild \
+              APP_BUILD_SCRIPT=/tmp/vmbuild/jni/Android.mk \
+              NDK_APPLICATION_MK=/tmp/vmbuild/jni/Application.mk
+          ls -la /tmp/vmbuild/libs/arm64-v8a /tmp/vmbuild/libs/armeabi-v7a
+          mkdir -p "$MAIN/libs/arm64-v8a" "$MAIN/libs/armeabi-v7a"
+          cp /tmp/vmbuild/libs/arm64-v8a/libVM.so   "$MAIN/libs/arm64-v8a/"
+          cp /tmp/vmbuild/libs/armeabi-v7a/libVM.so "$MAIN/libs/armeabi-v7a/"
+
+      - name: Assemble unsigned APK
+        run: |
+          set -e
+          ROOT="$(pwd)"
+          MAIN="src/PAPAJI EVIEL SRC/app/src/main"
+          BIN="src/PAPAJI EVIEL SRC/app/build/bin"
+          STAGE="build-apk/stage"
+          rm -rf build-apk && mkdir -p "$STAGE"
+          # prebuilt compiled resources (binary manifest + resources.arsc + res)
+          (cd "$STAGE" && unzip -q -o "$ROOT/$BIN/resources.ap_")
+          cp "$BIN/classes.dex" "$STAGE/"
+          mkdir -p "$STAGE/lib/arm64-v8a" "$STAGE/lib/armeabi-v7a"
+          cp "$MAIN/libs/arm64-v8a/libVM.so"   "$STAGE/lib/arm64-v8a/"
+          cp "$MAIN/libs/armeabi-v7a/libVM.so" "$STAGE/lib/armeabi-v7a/"
+          (cd "$STAGE" && zip -q -r ../unaligned.apk .)
+          ls -la build-apk/
+
+      - name: Zipalign + sign
+        run: |
+          set -e
+          cd build-apk
+          keytool -genkeypair -keystore shadow.keystore -storepass android \
+              -keypass android -alias shadowmodz -keyalg RSA -keysize 2048 \
+              -validity 10000 -dname "CN=Shadow Modz, OU=Dev, O=ShadowModz, C=IN"
+          "$BT/zipalign" -f 4 unaligned.apk aligned.apk
+          "$BT/apksigner" sign --ks shadow.keystore --storepass android \
+              --keypass android --out ShadowModz.apk aligned.apk
+
+      - name: Verify APK
+        run: |
+          cd build-apk
+          "$BT/apksigner" verify --verbose ShadowModz.apk
+          "$BT/aapt" dump badging ShadowModz.apk | head -8
+          unzip -l ShadowModz.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShadowModz-apk
+          path: build-apk/ShadowModz.apk

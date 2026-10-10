@@ -1,0 +1,726 @@
+/*
+╔══════════════════════════════════════════════════╗
+║   POKÉMON MODZ — FULL SOURCE (Pratham Daddy Ed.)  ║
+║   MADE BY:- @SRC BY CROSS MOD                     ║
+║   Theme: Pokémon / Pikachu / Pokeball             ║
+╚══════════════════════════════════════════════════╝
+*/
+
+#include <android/log.h>
+#include <unistd.h>
+#include <thread>
+#include <limits>
+#include <cmath>
+
+#include <xdl.h>
+#include <KittyUtils.h>
+#include <KittyMemory.h>
+#include <Il2Cpp.h>
+#include <SubstrateHook.h>
+#include <CydiaSubstrate.h>
+#include "Struct/Gui.hpp"
+#include <Struct/main.h>
+#include "fonts/FontAwesome6_solid.h"
+#include "ImGui/Toggle.h"
+#include "zygisk.hpp"
+
+// ImGui internal — needed for ImRect, ImLerp
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
+#endif
+#include "imgui_internal.h"
+
+void hack_thread();
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+    jvm = vm;
+    std::thread(hack_thread).detach();
+    return JNI_VERSION_1_6;
+}
+
+uintptr_t ArrayOffset  = 0x10;
+uintptr_t CountOffset  = 0x18;
+uintptr_t ValuesOffset = 0x20;
+uintptr_t PointerSize  = 0x8;
+
+// ============================================================
+//  POKÉMON THEME
+// ============================================================
+static void PokemonTheme()
+{
+    ImGuiStyle &style = ImGui::GetStyle();
+    ImVec4 *colors = style.Colors;
+
+    // Window background #FFFDE7
+    colors[ImGuiCol_WindowBg]        = ImVec4(1.000f, 0.992f, 0.906f, 0.97f);
+    // Child / panel #FFF9C4
+    colors[ImGuiCol_ChildBg]         = ImVec4(1.000f, 0.976f, 0.769f, 0.85f);
+    colors[ImGuiCol_PopupBg]         = ImVec4(1.000f, 0.976f, 0.769f, 0.98f);
+    // Border #FFD700
+    colors[ImGuiCol_Border]          = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_BorderShadow]    = ImVec4(1.000f, 0.843f, 0.000f, 0.35f);
+    colors[ImGuiCol_FrameBg]         = ImVec4(1.000f, 0.976f, 0.769f, 1.00f);
+    colors[ImGuiCol_FrameBgHovered]  = ImVec4(1.000f, 0.900f, 0.400f, 1.00f);
+    colors[ImGuiCol_FrameBgActive]   = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_TitleBg]         = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_TitleBgActive]   = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_TitleBgCollapsed]= ImVec4(1.000f, 0.843f, 0.000f, 0.75f);
+    colors[ImGuiCol_ScrollbarBg]     = ImVec4(1.000f, 0.992f, 0.906f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrab]   = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(1.000f, 0.900f, 0.300f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabActive]  = ImVec4(1.000f, 0.700f, 0.000f, 1.00f);
+    colors[ImGuiCol_CheckMark]       = ImVec4(1.000f, 0.000f, 0.000f, 1.00f);
+    colors[ImGuiCol_SliderGrab]      = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_SliderGrabActive]= ImVec4(1.000f, 0.000f, 0.000f, 1.00f);
+    colors[ImGuiCol_Button]          = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_ButtonHovered]   = ImVec4(1.000f, 0.900f, 0.300f, 1.00f);
+    colors[ImGuiCol_ButtonActive]    = ImVec4(1.000f, 0.000f, 0.000f, 1.00f);
+    colors[ImGuiCol_Header]          = ImVec4(1.000f, 0.843f, 0.000f, 0.85f);
+    colors[ImGuiCol_HeaderHovered]   = ImVec4(1.000f, 0.900f, 0.300f, 0.90f);
+    colors[ImGuiCol_HeaderActive]    = ImVec4(1.000f, 0.700f, 0.000f, 1.00f);
+    colors[ImGuiCol_Separator]       = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+    colors[ImGuiCol_SeparatorHovered]= ImVec4(1.000f, 0.000f, 0.000f, 1.00f);
+    colors[ImGuiCol_SeparatorActive] = ImVec4(1.000f, 0.000f, 0.000f, 1.00f);
+    colors[ImGuiCol_Text]            = ImVec4(0.180f, 0.180f, 0.180f, 1.00f);
+    colors[ImGuiCol_TextDisabled]    = ImVec4(0.500f, 0.500f, 0.500f, 1.00f);
+    colors[ImGuiCol_TextSelectedBg]  = ImVec4(1.000f, 0.843f, 0.000f, 0.50f);
+    colors[ImGuiCol_Tab]             = ImVec4(1.000f, 0.843f, 0.000f, 0.85f);
+    colors[ImGuiCol_TabHovered]      = ImVec4(1.000f, 0.900f, 0.300f, 1.00f);
+    colors[ImGuiCol_TabActive]       = ImVec4(1.000f, 0.843f, 0.000f, 1.00f);
+
+    style.WindowRounding    = 16.0f;
+    style.ChildRounding     = 14.0f;
+    style.FrameRounding     = 12.0f;
+    style.PopupRounding     = 14.0f;
+    style.ScrollbarRounding = 12.0f;
+    style.GrabRounding      = 12.0f;
+    style.TabRounding       = 10.0f;
+    style.WindowBorderSize  = 4.0f;   // Pikachu yellow border 4px
+    style.ChildBorderSize   = 2.0f;
+    style.FrameBorderSize   = 2.0f;
+    style.PopupBorderSize   = 2.0f;
+    style.WindowPadding     = ImVec2(14.0f, 14.0f);
+    style.FramePadding      = ImVec2(10.0f, 6.0f);
+    style.ItemSpacing       = ImVec2(10.0f, 8.0f);
+    style.ItemInnerSpacing  = ImVec2(8.0f, 6.0f);
+    style.ScrollbarSize     = 10.0f;
+    style.GrabMinSize       = 14.0f;
+}
+
+// ============================================================
+//  POKEBALL TAB BUTTON
+// ============================================================
+static bool PokeballTab(const char* label, bool active)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems) return false;
+
+    const ImGuiID id = window->GetID(label);
+    const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+
+    float radius = 22.0f;
+    ImVec2 pos = window->DC.CursorPos;
+    ImVec2 size(radius * 2.0f + 6.0f, radius * 2.0f + 6.0f);
+    ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+
+    ImGui::ItemSize(bb, 0.0f);
+    if (!ImGui::ItemAdd(bb, id)) return false;
+
+    bool hovered, held;
+    bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+
+    ImDrawList* dl = window->DrawList;
+    ImVec2 center(pos.x + size.x * 0.5f, pos.y + size.y * 0.5f);
+
+    ImU32 col_top    = active ? IM_COL32(255, 215, 0, 255)
+                              : (hovered ? IM_COL32(255, 235, 120, 255)
+                                         : IM_COL32(255, 215, 0, 220));
+    ImU32 col_bottom = active ? IM_COL32(255, 0, 0, 255) : IM_COL32(220, 220, 220, 255);
+    ImU32 col_white  = IM_COL32(255, 255, 255, 255);
+    ImU32 col_black  = IM_COL32(0, 0, 0, 255);
+
+    // Top half (yellow)
+    dl->PathArcTo(center, radius, IM_PI, IM_PI * 2.0f, 32);
+    dl->PathFillConvex(col_top);
+    // Bottom half (red / gray)
+    dl->PathArcTo(center, radius, 0.0f, IM_PI, 32);
+    dl->PathFillConvex(col_bottom);
+    // Center white band
+    dl->AddRectFilled(ImVec2(center.x - radius, center.y - 4.0f),
+                      ImVec2(center.x + radius, center.y + 4.0f), col_white);
+    // Center circle
+    dl->AddCircleFilled(center, 6.0f, col_white, 24);
+    dl->AddCircle(center, 6.0f, col_black, 24, 2.0f);
+    // Outline
+    dl->AddCircle(center, radius, col_black, 32, 2.5f);
+
+    // Label below
+    ImVec2 txt_pos(center.x - label_size.x * 0.5f, bb.Max.y + 2.0f);
+    dl->AddText(txt_pos, IM_COL32(60, 40, 0, 255), label);
+
+    return pressed;
+}
+
+// ============================================================
+//  PIKACHU TOGGLE
+// ============================================================
+void PikachuToggle(const char* label, bool* v)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems) return;
+
+    const ImGuiID id = window->GetID(label);
+    const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+
+    float h = 24.0f;
+    float w = 48.0f;
+    float radius = h * 0.5f;
+
+    ImVec2 pos = window->DC.CursorPos;
+    ImRect bb(pos, ImVec2(pos.x + w, pos.y + h));
+    ImGui::ItemSize(bb, 0.0f);
+    if (!ImGui::ItemAdd(bb, id)) return;
+
+    bool hovered, held;
+    bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+    if (pressed) *v = !*v;
+
+    static float anim = 0.0f;
+    anim = ImLerp(anim, *v ? 1.0f : 0.0f, ImGui::GetIO().DeltaTime * 14.0f);
+
+    ImDrawList* dl = window->DrawList;
+    ImU32 bg = *v ? IM_COL32(255, 215, 0, 255) : IM_COL32(204, 204, 204, 255);
+    dl->AddRectFilled(bb.Min, bb.Max, bg, radius);
+    dl->AddRect(bb.Min, bb.Max, IM_COL32(255, 215, 0, 255), radius, 0, 2.5f);
+
+    // Knob — white circle with red cheek
+    float knob_x = bb.Min.x + radius + (w - h) * anim;
+    ImVec2 knob_center(knob_x, bb.Min.y + radius);
+    dl->AddCircleFilled(knob_center, radius - 3.0f, IM_COL32(255, 255, 255, 255), 24);
+    dl->AddCircle(knob_center, radius - 3.0f, IM_COL32(0, 0, 0, 60), 24, 1.5f);
+    // Red cheek
+    dl->AddCircleFilled(ImVec2(knob_center.x + 4.0f, knob_center.y + 2.0f),
+                        3.0f, IM_COL32(255, 0, 0, 220), 16);
+
+    // Pikachu tail wag when ON
+    if (*v && anim > 0.9f) {
+        float t = (float)ImGui::GetTime() * 6.0f;
+        float wag = sinf(t) * 4.0f;
+        ImVec2 tail_base(bb.Max.x - 4.0f, bb.Min.y - 2.0f);
+        dl->AddLine(tail_base, ImVec2(tail_base.x + 6.0f + wag, tail_base.y - 8.0f),
+                    IM_COL32(255, 200, 0, 255), 2.5f);
+        dl->AddLine(ImVec2(tail_base.x + 6.0f + wag, tail_base.y - 8.0f),
+                    ImVec2(tail_base.x + 2.0f + wag, tail_base.y - 14.0f),
+                    IM_COL32(255, 200, 0, 255), 2.5f);
+    }
+
+    // Lightning bolt when ON
+    if (*v) {
+        ImVec2 bolt(bb.Max.x + 4.0f, bb.Min.y + 4.0f);
+        dl->AddTriangleFilled(ImVec2(bolt.x, bolt.y),
+                              ImVec2(bolt.x + 6.0f, bolt.y + 2.0f),
+                              ImVec2(bolt.x + 2.0f, bolt.y + 8.0f),
+                              IM_COL32(255, 215, 0, 255));
+    }
+
+    // Label
+    ImGui::SameLine();
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (h - label_size.y) * 0.5f);
+    ImGui::TextColored(ImVec4(0.20f, 0.15f, 0.00f, 1.00f), "%s", label);
+}
+
+// ============================================================
+//  MOD MENU ROW (52px, rounded, pokeball icon + toggle)
+// ============================================================
+static bool ModRow(const char* label, bool* v)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems) return false;
+
+    ImGuiID id = window->GetID(label);
+    ImVec2 pos = window->DC.CursorPos;
+    float avail = ImGui::GetContentRegionAvail().x;
+    if (avail < 100.0f) avail = 300.0f;
+    ImVec2 size(avail, 52.0f);
+    ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+    ImGui::ItemSize(bb, 4.0f);
+    if (!ImGui::ItemAdd(bb, id)) return false;
+
+    bool hovered, held;
+    bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+    if (pressed) *v = !*v;
+
+    ImDrawList* dl = window->DrawList;
+    ImU32 bg = hovered ? IM_COL32(255, 245, 180, 255) : IM_COL32(255, 249, 196, 255);
+    dl->AddRectFilled(bb.Min, bb.Max, bg, 26.0f);
+    dl->AddRect(bb.Min, bb.Max, IM_COL32(255, 215, 0, 255), 26.0f, 0, 2.5f);
+
+    // Pokeball icon
+    ImVec2 icon_c(bb.Min.x + 30.0f, bb.Min.y + 26.0f);
+    dl->PathArcTo(icon_c, 9.0f, IM_PI, IM_PI * 2.0f, 20);
+    dl->PathFillConvex(IM_COL32(255, 215, 0, 255));
+    dl->PathArcTo(icon_c, 9.0f, 0.0f, IM_PI, 20);
+    dl->PathFillConvex(IM_COL32(255, 0, 0, 255));
+    dl->AddRectFilled(ImVec2(icon_c.x - 9.0f, icon_c.y - 2.0f),
+                      ImVec2(icon_c.x + 9.0f, icon_c.y + 2.0f), IM_COL32(255, 255, 255, 255));
+    dl->AddCircleFilled(icon_c, 3.0f, IM_COL32(255, 255, 255, 255), 12);
+    dl->AddCircle(icon_c, 3.0f, IM_COL32(0, 0, 0, 255), 12, 1.0f);
+    dl->AddCircle(icon_c, 9.0f, IM_COL32(0, 0, 0, 255), 20, 1.5f);
+
+    // Label
+    dl->AddText(ImVec2(bb.Min.x + 55.0f, bb.Min.y + 18.0f),
+                IM_COL32(40, 30, 0, 255), label);
+
+    // Right-side toggle
+    float sw = 48.0f, sh = 24.0f;
+    ImVec2 tpos(bb.Max.x - sw - 14.0f, bb.Min.y + (52.0f - sh) * 0.5f);
+    ImU32 tbg = *v ? IM_COL32(255, 215, 0, 255) : IM_COL32(204, 204, 204, 255);
+    dl->AddRectFilled(tpos, ImVec2(tpos.x + sw, tpos.y + sh), tbg, sh * 0.5f);
+    dl->AddRect(tpos, ImVec2(tpos.x + sw, tpos.y + sh),
+                IM_COL32(255, 215, 0, 255), sh * 0.5f, 0, 1.5f);
+    float knob_x = tpos.x + sh * 0.5f + (sw - sh) * (*v ? 1.0f : 0.0f);
+    ImVec2 knob_c(knob_x, tpos.y + sh * 0.5f);
+    dl->AddCircleFilled(knob_c, sh * 0.5f - 2.0f, IM_COL32(255, 255, 255, 255), 20);
+    dl->AddCircleFilled(ImVec2(knob_c.x + 3.0f, knob_c.y + 1.0f), 2.5f,
+                        IM_COL32(255, 0, 0, 230), 12);
+
+    return pressed;
+}
+
+// ============================================================
+//  FLOATING LIGHTNING BOLTS (background)
+// ============================================================
+static void DrawLightningBolts()
+{
+    ImDrawList* dl = ImGui::GetBackgroundDrawList();
+    float t = (float)ImGui::GetTime();
+    float W = ImGui::GetIO().DisplaySize.x;
+    float H = ImGui::GetIO().DisplaySize.y;
+    if (W < 10.0f || H < 10.0f) return;
+
+    for (int i = 0; i < 6; ++i) {
+        float phase = t * 0.6f + i * 1.3f;
+        float x = fmodf(phase * 90.0f + i * 137.0f, W);
+        float y = 40.0f + sinf(phase * 2.0f) * 60.0f + i * 120.0f;
+        if (y > H) y = fmodf(y, H);
+        ImVec2 p(x, y);
+        dl->AddTriangleFilled(ImVec2(p.x, p.y),
+                              ImVec2(p.x + 8.0f, p.y + 3.0f),
+                              ImVec2(p.x + 3.0f, p.y + 12.0f),
+                              IM_COL32(255, 215, 0, 120));
+    }
+}
+
+// ============================================================
+//  POKEBALL WATERMARK (background)
+// ============================================================
+static void DrawPokeballWatermark()
+{
+    ImDrawList* dl = ImGui::GetBackgroundDrawList();
+    ImVec2 ds = ImGui::GetIO().DisplaySize;
+    if (ds.x < 50.0f || ds.y < 50.0f) return;
+
+    ImVec2 c(ds.x - 90.0f, ds.y - 90.0f);
+    float r = 80.0f;
+
+    dl->AddCircleFilled(c, r, IM_COL32(255, 255, 255, 40), 40);
+    dl->PathArcTo(c, r, IM_PI, IM_PI * 2.0f, 40);
+    dl->PathFillConvex(IM_COL32(255, 215, 0, 45));
+    dl->PathArcTo(c, r, 0.0f, IM_PI, 40);
+    dl->PathFillConvex(IM_COL32(255, 0, 0, 45));
+
+    dl->AddRectFilled(ImVec2(c.x - r, c.y - 5.0f),
+                      ImVec2(c.x + r, c.y + 5.0f), IM_COL32(255, 255, 255, 60));
+
+    dl->AddCircleFilled(c, 12.0f, IM_COL32(255, 255, 255, 80), 24);
+    dl->AddCircle(c, 12.0f, IM_COL32(0, 0, 0, 60), 24, 3.0f);
+    dl->AddCircle(c, r, IM_COL32(0, 0, 0, 60), 40, 4.0f);
+}
+
+// ============================================================
+//  POKEBALL RED CLOSE BUTTON
+// ============================================================
+static bool PokeballCloseButton(const char* label)
+{
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems) return false;
+
+    ImGuiID id = window->GetID(label);
+    ImVec2 pos = window->DC.CursorPos;
+    ImVec2 size(140.0f, 44.0f);
+    ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
+    ImGui::ItemSize(bb, 4.0f);
+    if (!ImGui::ItemAdd(bb, id)) return false;
+
+    bool hovered, held;
+    bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
+    ImDrawList* dl = window->DrawList;
+
+    ImU32 bg = hovered ? IM_COL32(200, 0, 0, 255) : IM_COL32(255, 0, 0, 255);
+    dl->AddRectFilled(bb.Min, bb.Max, bg, 22.0f);
+    dl->AddRect(bb.Min, bb.Max, IM_COL32(255, 255, 255, 255), 22.0f, 0, 3.0f);
+
+    ImVec2 ts = ImGui::CalcTextSize(label);
+    dl->AddText(ImVec2(bb.Min.x + (size.x - ts.x) * 0.5f,
+                       bb.Min.y + (size.y - ts.y) * 0.5f),
+                IM_COL32(255, 255, 255, 255), label);
+    return pressed;
+}
+
+// ============================================================
+//  LEGACY TOGGLE (kept, used for Speed Timer)
+// ============================================================
+void Zxcmukku(const char* label, bool* v)
+{
+    ImVec2 p = ImGui::GetCursorScreenPos();
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    float height = 24.0f;
+    float width = 48.0f;
+    float radius = height * 0.50f;
+    ImGuiID id = ImGui::GetID(label);
+
+    ImGui::InvisibleButton(label, ImVec2(width, height));
+    if (ImGui::IsItemClicked())
+        *v = !*v;
+    float lastAnimPos = ImGui::GetStateStorage()->GetFloat(id, *v ? 1.0f : 0.0f);
+    float animPos = ImLerp(lastAnimPos, *v ? 1.0f : 0.0f, ImGui::GetIO().DeltaTime * 12.0f);
+    ImGui::GetStateStorage()->SetFloat(id, animPos);
+
+    bool hovered = ImGui::IsItemHovered();
+
+    ImVec4 col_off = ImVec4(0.80f, 0.80f, 0.80f, 1.0f); // #CCCCCC
+    ImVec4 col_on  = ImVec4(1.00f, 0.843f, 0.00f, 1.0f); // #FFD700
+
+    if (hovered) {
+        col_off.x += 0.05f; col_off.y += 0.05f; col_off.z += 0.05f;
+    }
+
+    ImU32 bg_col = ImGui::GetColorU32(ImLerp(col_off, col_on, animPos));
+    ImU32 circle_col = IM_COL32(255, 255, 255, 255);
+    draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), bg_col, radius);
+    draw_list->AddRect(p, ImVec2(p.x + width, p.y + height),
+                       IM_COL32(255, 215, 0, 255), radius, 0, 1.5f);
+    float knob_radius = radius - 3.0f;
+    float start_x = p.x + radius;
+    float end_x = p.x + width - radius;
+    float knob_x = ImLerp(start_x, end_x, animPos);
+    draw_list->AddCircleFilled(ImVec2(knob_x, p.y + radius), knob_radius + 1.0f,
+                               IM_COL32(0, 0, 0, 50));
+    draw_list->AddCircleFilled(ImVec2(knob_x, p.y + radius), knob_radius, circle_col);
+    // Red cheek
+    draw_list->AddCircleFilled(ImVec2(knob_x + 3.0f, p.y + radius + 1.0f), 2.5f,
+                               IM_COL32(255, 0, 0, 230), 12);
+
+    ImGui::SameLine();
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (height / 4));
+    ImGui::Text("%s", label);
+}
+
+// ============================================================
+//  BYPASS STUBS (kept from original)
+// ============================================================
+void(*Bypass1)(void* _this);
+void _Bypass1(void* _this) { return; }
+
+void(*Bypass2)(void* _this);
+void _Bypass2(void* _this) { return; }
+
+void (*BYPAS)() = 0;
+void _BYPAS(void* unk) { return; }
+
+// ============================================================
+//  IL2CPP / MAIN
+// ============================================================
+uintptr_t il2cpp_base = 0;
+void *getRealAddr(ulong offset) {
+    return reinterpret_cast<void*>(il2cpp_base + offset);
+};
+
+namespace Settings {
+    static int Tab = 1;
+}
+
+bool clearMousePos = true;
+bool initImGui = false;
+
+// ============================================================
+//  HOOK: eglSwapBuffers (MAIN UI)
+// ============================================================
+inline EGLBoolean (*old_eglSwapBuffers)(EGLDisplay dpy, EGLSurface surface);
+inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
+    eglQuerySurface(dpy, surface, EGL_WIDTH, &g_GlWidth);
+    eglQuerySurface(dpy, surface, EGL_HEIGHT, &g_GlHeight);
+
+    if (!g_IsSetup) {
+        prevWidth = g_GlWidth;
+        prevHeight = g_GlHeight;
+        SetupImgui();
+        g_IsSetup = true;
+    }
+
+    static bool isTouching = false;
+    static float touchStartTime = 0.0f;
+
+    // Apply Pokémon theme every frame
+    PokemonTheme();
+
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
+    ImGui::NewFrame();
+
+    // ---- Touch input ----
+    int touchCount = ((int (*)())(Class_Input__get_touchCount))();
+    if (touchCount > 0) {
+        UnityEngine_Touch_Fields touch = ((UnityEngine_Touch_Fields(*)(int))(Class_Input__GetTouch))(0);
+        float reverseY = io.DisplaySize.y - touch.m_Position.fields.y;
+        io.MousePos = ImVec2(touch.m_Position.fields.x, reverseY);
+        if (!isTouching) touchStartTime = ImGui::GetTime();
+        io.MouseDown[0] = true;
+        isTouching = true;
+    } else {
+        if (isTouching && (ImGui::GetTime() - touchStartTime < 0.06f)) {
+            io.MouseDown[0] = true;
+        } else {
+            UpdateSpeedhack();
+            io.MouseDown[0] = false;
+            isTouching = false;
+        }
+    }
+
+    // ---- ESP ----
+    DrawESP(g_GlWidth, g_GlHeight);
+
+    // ---- Background: pokeball watermark + lightning bolts ----
+    DrawPokeballWatermark();
+    DrawLightningBolts();
+
+    // ---- Speed Hack floating mini window ----
+    {
+        ImVec2 screenCenter = ImGui::GetMainViewport()->GetCenter();
+        ImVec2 screenSize   = ImGui::GetMainViewport()->Size;
+        ImVec2 pos(screenCenter.x, screenCenter.y + screenSize.y * 0.30f);
+        ImGui::SetNextWindowPos(pos, ImGuiCond_FirstUseEver, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowBgAlpha(0.0f);
+        if (ImGui::Begin("Speed Hack", nullptr,
+            ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoScrollbar |
+            ImGuiWindowFlags_NoSavedSettings))
+        {
+            PikachuToggle("SPEED TIMER", &SpeedHack);
+        }
+        ImGui::End();
+    }
+
+    // ---- Main Pokémon menu ----
+    ImGui::SetNextWindowSize(ImVec2((float)g_GlWidth * 0.62f,
+                                    (float)g_GlHeight * 0.72f),
+                             ImGuiCond_Once);
+    if (ImGui::Begin("PAPAJI EVIEL", nullptr,
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_NoCollapse))
+		
+		ImDrawList* pDrawList;
+const auto& pWindowDrawList = ImGui::GetWindowDrawList();
+//pDrawList = pWindowDrawList;
+                    
+static const int numParticles = 250;
+static ImVec2 particlePositions[numParticles];
+static ImVec2 particleDistance;
+static ImVec2 particleVelocities[numParticles];
+
+static bool initialized = false;
+if (!initialized)
+{
+for (int i = 0; i < numParticles; ++i)
+{
+particlePositions[i] = ImVec2(
+ImGui::GetWindowPos().x + ImGui::GetWindowSize().x * static_cast<float>(rand()) / RAND_MAX,
+ImGui::GetWindowPos().y + ImGui::GetWindowSize().y * static_cast<float>(rand()) / RAND_MAX
+);
+
+particleVelocities[i] = ImVec2(
+static_cast<float>((rand() % 150) - 70),
+static_cast<float>((rand() % 150) - 70)
+);
+
+}
+
+initialized = true;
+}
+
+ImVec2 cursorPos = ImGui::GetIO().MousePos;
+for (int i = 0; i < numParticles; ++i)
+{
+  //draw lines to particles
+for (int j = i + 1; j < numParticles; ++j)
+{
+float distance = std::hypotf(particlePositions[j].x - particlePositions[i].x, particlePositions[j].y - particlePositions[i].y);
+float opacity = 1.0f - (distance / 60.0f);  // opacity cahnge
+
+if (opacity > 0.0f)
+{
+ImU32 lineColor = ImGui::GetColorU32(ImVec4(1.0f, 1.f, 1.0f, opacity));
+//pDrawList->AddLine(particlePositions[i], particlePositions[j], lineColor);
+}
+}
+  
+  //draw lines to cursor
+float distanceToCursor = std::hypotf(cursorPos.x - particlePositions[i].x, cursorPos.y - particlePositions[i].y);
+float opacityToCursor = 1.0f - (distanceToCursor / 60.0f);  // Adjust the divisor to control the opacity change
+
+  if (opacityToCursor > 0.0f)
+  {
+   ImU32 lineColorToCursor = ImGui::GetColorU32(ImVec4(0.5f, 0.8f, 1.0f, opacityToCursor));
+   //pDrawList->AddLine(cursorPos, particlePositions[i], lineColorToCursor);
+  }
+ }
+      
+ //update and render particles
+ float deltaTime = ImGui::GetIO().DeltaTime;
+ for (int i = 0; i < numParticles; ++i)
+ {
+  particlePositions[i].x += particleVelocities[i].x * deltaTime;
+  particlePositions[i].y += particleVelocities[i].y * deltaTime;
+
+  // Stay in window
+  if (particlePositions[i].x < ImGui::GetWindowPos().x)
+   particlePositions[i].x = ImGui::GetWindowPos().x + ImGui::GetWindowSize().x;
+  else if (particlePositions[i].x > ImGui::GetWindowPos().x + ImGui::GetWindowSize().x)
+   particlePositions[i].x = ImGui::GetWindowPos().x;
+
+  if (particlePositions[i].y < ImGui::GetWindowPos().y)
+   particlePositions[i].y = ImGui::GetWindowPos().y + ImGui::GetWindowSize().y;
+  else if (particlePositions[i].y > ImGui::GetWindowPos().y + ImGui::GetWindowSize().y)
+   particlePositions[i].y = ImGui::GetWindowPos().y;
+
+  ImU32 particleColour = ImColor(0, 0, 255, 255);
+
+  //render particles behind components
+ // pDrawList->AddCircleFilled(particlePositions[i], 5.0f, particleColour);
+ }
+    {
+        static int activeTab = 0;
+
+        // Tabs — pokeball style
+        if (PokeballTab("AIM",   activeTab == 0)) activeTab = 0;
+        ImGui::SameLine();
+        if (PokeballTab("ESP",   activeTab == 1)) activeTab = 1;
+        ImGui::SameLine();
+        if (PokeballTab("CATCH", activeTab == 2)) activeTab = 2;
+        ImGui::SameLine();
+        if (PokeballTab("MISC",  activeTab == 3)) activeTab = 3;
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // ===== AIM =====
+        if (activeTab == 0) {
+            ModRow("Enable AimBot", &Aimbot);
+            ImGui::Combo("##AimDir", &AimWhen, dir, IM_ARRAYSIZE(dir));
+            ImGui::SliderFloat("FOV",      &Fov_Aim, 0.0f, 500.0f,  "%.f");
+            ImGui::SliderFloat("Distance", &Aimdis,  0.0f, 1000.0f, "%.f");
+        }
+        // ===== ESP =====
+        else if (activeTab == 1) {
+            ModRow("Enable ESP", &Enable);
+            ModRow("ESP LINE",     &Config.ESP.Line);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("##LineColor", (float*)&colorLine,
+                              ImGuiColorEditFlags_NoInputs);
+            ModRow("ESP BOX",      &Config.ESP.Box);
+            ImGui::SameLine();
+            ImGui::ColorEdit4("##BoxColor",  (float*)&colorBox,
+                              ImGuiColorEditFlags_NoInputs);
+            ModRow("ESP NAME",     &Config.ESP.Distancia);
+            ModRow("ESP DISTANCE", &Config.ESP.Jarak);
+            ModRow("ESP HEALTH",   &Config.ESP.Health);
+        }
+        // ===== CATCH =====
+        else if (activeTab == 2) {
+            ModRow("Sniper Fast", &SniperFast);
+            ModRow("Reset Acc",   &Reset);
+        }
+        // ===== MISC =====
+        else {
+            ModRow("Speedhack", &SpeedHack);
+            ImGui::Spacing();
+            ImGui::TextColored(ImVec4(0.6f, 0.1f, 0.1f, 1.0f), "</> Dev: CrossMods");
+            ImGui::TextColored(ImVec4(0.6f, 0.1f, 0.1f, 1.0f), "TELEGRAM: @CROSSMODS");
+        }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        // Close button centered
+        float ww = ImGui::GetWindowWidth();
+        ImGui::SetCursorPosX((ww - 140.0f) * 0.5f);
+        if (PokeballCloseButton("CLOSE")) {
+            // Apna close logic yahan — e.g. ShowMenu = false;
+        }
+    }
+    ImGui::End();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    return old_eglSwapBuffers(dpy, surface);
+}
+
+// ============================================================
+//  STARTUP
+// ============================================================
+typedef unsigned long DWORD;
+static uintptr_t libBase;
+
+inline void StartGUI() {
+    void *ptr_eglSwapBuffer = DobbySymbolResolver("/system/lib/libEGL.so", "eglSwapBuffers");
+    if (ptr_eglSwapBuffer != nullptr) {
+        DobbyHook((void *)ptr_eglSwapBuffer, (void *)hook_eglSwapBuffers,
+                  (void **)&old_eglSwapBuffers);
+        LOGD("GUI started successfully");
+    }
+}
+
+void hack_thread() {
+    sleep(5);
+    pid_t pid = getpid();
+    LOGD("Hack Thread initiated for PID: %i", pid);
+
+    do {
+        il2cpp_base = get_module_base(pid, "libil2cpp.so");
+        sleep(1);
+    } while (il2cpp_base == 0);
+
+    LOGD("libil2cpp.so found at address: 0x%" PRIxPTR, il2cpp_base);
+    Il2CppAttach();
+
+    DobbyHook(Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
+                                    OBFUSCATE("COW"),
+                                    OBFUSCATE("GameConfig"),
+                                    OBFUSCATE("get_ResetGuest"), 0),
+              (void *) ResetGuest, (void **) &_ResetGuest);
+
+    DobbyHook(Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
+                                    OBFUSCATE("COW.GamePlay"),
+                                    OBFUSCATE("Weapon"),
+                                    OBFUSCATE("IsContinuousGen"), 0),
+              (void *) IsContinuousGen, (void **) &_IsContinuousGen);
+
+    StartGUI();
+}
+
+/*
+// HINDI -
+// CREDIT - ZARU X MUKKU JISNE CREDIT HATATA USKI MAA KA BHOSDA.
+// RANDI K LADKO TUMHARI MAA KA BHOSDA FAD DUNGA AGAR CREDIT HATA DO.
+
+// ENGLISH -
+// CREDIT - ZARU X MUKKU IF YOU REMOVE THE CREDIT THEN YOU ARE THE REAL SON OF THE BITCH.
+// DON'T EVER STEAL OUR CREDITS YOU MFS
+*/
