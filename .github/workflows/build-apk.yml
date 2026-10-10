@@ -85,8 +85,8 @@ jobs:
               -keypass android -alias shadowmodz -keyalg RSA -keysize 2048 \
               -validity 10000 -dname "CN=Shadow Modz, OU=Dev, O=ShadowModz, C=IN" \
             && "$BT/zipalign" -f 4 unaligned.apk aligned.apk \
-            && "$BT/apksigner" sign --ks shadow.keystore --storepass android \
-              --keypass android --out ShadowModz.apk aligned.apk ; } > /tmp/sign.log 2>&1 \
+            && "$BT/apksigner" sign --ks shadow.keystore --ks-pass pass:android \
+              --key-pass pass:android --out ShadowModz.apk aligned.apk ; } > /tmp/sign.log 2>&1 \
             || { echo "SIGN FAILED"; cat /tmp/sign.log; exit 1; }
           cat /tmp/sign.log
 
