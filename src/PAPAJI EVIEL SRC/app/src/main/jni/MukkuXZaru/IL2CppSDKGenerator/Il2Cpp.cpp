@@ -2,7 +2,7 @@
 #include <map>
 #include <jni.h>
 #include <unistd.h>
-#include "Il2cpp.h"
+#include "Il2Cpp.h"
 #include "xdl.h"
 
 #define g_LogTag "AnekoCheat"

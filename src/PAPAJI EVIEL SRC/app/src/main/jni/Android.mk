@@ -23,14 +23,14 @@ LOCAL_LDLIBS           := -llog -landroid -lEGL -lGLESv3 -lGLESv2 -lGLESv1_CM -l
 
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES       += $(LOCAL_PATH)/Dooby
-LOCAL_C_INCLUDES       += $(LOCAL_PATH)/imgui
+LOCAL_C_INCLUDES       += $(LOCAL_PATH)/Dobby
+LOCAL_C_INCLUDES       += $(LOCAL_PATH)/ImGui
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)/KittyMemory
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)/Unity
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)/include/And64InlineHook
 LOCAL_C_INCLUDES       += $(LOCAL_PATH)/include/Substrate
 
-FILE_LIST               := $(wildcard $(LOCAL_PATH)/imgui/*.c*)
+FILE_LIST               := $(wildcard $(LOCAL_PATH)/ImGui/*.c*)
 FILE_LIST               += $(wildcard $(LOCAL_PATH)/xdl/*.c*)
 FILE_LIST               += $(wildcard $(LOCAL_PATH)/KittyMemory/*.c*)
 FILE_LIST              += $(wildcard $(LOCAL_PATH)/MukkuXZaru/IL2CppSDKGenerator/*.c*)

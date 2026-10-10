@@ -1,6 +1,6 @@
 #include <map>
 #include <jni.h>
-#include "dobby/dobby.h"
+#include "Dobby/dobby.h"
 
 namespace Tools {
     void Hook(void *target, void *replace, void **backup);
