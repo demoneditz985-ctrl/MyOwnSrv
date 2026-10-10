@@ -273,6 +273,7 @@ template<typename K, typename V> struct Il2CppDictionary {
 template<typename K, typename V>
 using Dictionary = Il2CppDictionary<K, V>;
 
+extern bool g_il2cppReady;
 void Il2CppAttach(const char *name="libil2cpp.so");
 void *Il2CppGetImageByName(const char *image);
 void *Il2CppGetClassType(const char *image, const char *namespaze, const char *clazz);

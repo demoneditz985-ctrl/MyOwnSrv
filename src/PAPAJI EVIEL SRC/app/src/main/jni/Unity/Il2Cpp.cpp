@@ -2,10 +2,13 @@
 #include <map>
 #include <jni.h>
 #include <unistd.h>
+#include <cstring>
 #include "Il2cpp.h"
 #include "xdl.h"
 
 #define g_LogTag "Aneko"
+
+bool g_il2cppReady = false;
 
 typedef unsigned short UTF16;
 typedef wchar_t UTF32;
@@ -53,7 +56,10 @@ UTF32 surrogate_to_utf32(UTF16 high, UTF16 low) {
 const char* utf16_to_utf8(const UTF16* source, size_t len) {
     std::u16string s(source, source + len);
     std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-    return convert.to_bytes(s).c_str();
+    std::string tmp = convert.to_bytes(s);
+    char* out = new char[tmp.size() + 1];
+    memcpy(out, tmp.data(), tmp.size() + 1);
+    return out;
 }
 
 const wchar_t* utf16_to_utf32(const UTF16* source, size_t len) {
@@ -93,6 +99,7 @@ Il2CppString *Il2CppString::Create(const wchar_t *s, int len) {
 }
 
 void *Il2CppGetImageByName(const char *image) {
+	if (!g_il2cppReady) return 0;
 	size_t size;
 	void **assemblies = il2cpp_domain_get_assemblies(il2cpp_domain_get(), &size);
 	for(int i = 0; i < size; ++i) {
@@ -302,6 +309,7 @@ size_t Il2CppGetStaticFieldOffset(const char *image, const char *namespaze, cons
 }
 
 bool Il2CppIsAssembliesLoaded() {
+	if (!g_il2cppReady) return 0;
 	size_t size;
 	void **assemblies = il2cpp_domain_get_assemblies(il2cpp_domain_get(), &size);
 	return size != 0 && assemblies != 0;

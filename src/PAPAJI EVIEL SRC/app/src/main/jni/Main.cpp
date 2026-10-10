@@ -4,6 +4,7 @@
 #include <limits>
 #include <cmath>
 #include <cstdlib>
+#include <cstdio>
 
 #include <xdl.h>
 #include <KittyUtils.h>
@@ -37,62 +38,61 @@ uintptr_t ValuesOffset = 0x20;
 uintptr_t PointerSize  = 0x8;
 
 // ============================================================
-//  SHADOW MODZ — DARK NEON THEME
+//  SHADOW MODZ — RED / BLACK THEME (Hollow style)
 // ============================================================
 static void ShadowModzTheme()
 {
     ImGuiStyle &style = ImGui::GetStyle();
     ImVec4 *colors = style.Colors;
 
-    // Window background — near-black void #050610
-    colors[ImGuiCol_WindowBg]        = ImVec4(0.020f, 0.024f, 0.043f, 0.94f);
-    // Child / panel — deep navy
-    colors[ImGuiCol_ChildBg]         = ImVec4(0.043f, 0.051f, 0.078f, 0.72f);
-    colors[ImGuiCol_PopupBg]         = ImVec4(0.031f, 0.037f, 0.059f, 0.98f);
-    // Border — neon cyan
-    colors[ImGuiCol_Border]          = ImVec4(0.000f, 0.860f, 1.000f, 0.85f);
-    colors[ImGuiCol_BorderShadow]    = ImVec4(1.000f, 0.100f, 0.750f, 0.28f);
-    colors[ImGuiCol_FrameBg]         = ImVec4(0.059f, 0.070f, 0.110f, 1.00f);
-    colors[ImGuiCol_FrameBgHovered]  = ImVec4(0.000f, 0.330f, 0.430f, 1.00f);
-    colors[ImGuiCol_FrameBgActive]   = ImVec4(0.000f, 0.680f, 0.850f, 1.00f);
-    colors[ImGuiCol_TitleBg]         = ImVec4(0.012f, 0.015f, 0.027f, 1.00f);
-    colors[ImGuiCol_TitleBgActive]   = ImVec4(0.086f, 0.020f, 0.196f, 1.00f);
-    colors[ImGuiCol_TitleBgCollapsed]= ImVec4(0.012f, 0.015f, 0.027f, 0.70f);
-    colors[ImGuiCol_ScrollbarBg]     = ImVec4(0.020f, 0.024f, 0.043f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrab]   = ImVec4(0.000f, 0.550f, 0.700f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.000f, 0.860f, 1.000f, 1.00f);
-    colors[ImGuiCol_ScrollbarGrabActive]  = ImVec4(1.000f, 0.100f, 0.750f, 1.00f);
-    colors[ImGuiCol_CheckMark]       = ImVec4(1.000f, 0.100f, 0.750f, 1.00f);
-    colors[ImGuiCol_SliderGrab]      = ImVec4(0.000f, 0.900f, 1.000f, 1.00f);
-    colors[ImGuiCol_SliderGrabActive]= ImVec4(1.000f, 0.100f, 0.750f, 1.00f);
-    colors[ImGuiCol_Button]          = ImVec4(0.067f, 0.078f, 0.129f, 1.00f);
-    colors[ImGuiCol_ButtonHovered]   = ImVec4(0.000f, 0.300f, 0.420f, 1.00f);
-    colors[ImGuiCol_ButtonActive]    = ImVec4(0.450f, 0.050f, 0.550f, 1.00f);
-    colors[ImGuiCol_Header]          = ImVec4(0.196f, 0.020f, 0.451f, 0.75f);
-    colors[ImGuiCol_HeaderHovered]   = ImVec4(0.000f, 0.450f, 0.600f, 0.85f);
-    colors[ImGuiCol_HeaderActive]    = ImVec4(0.000f, 0.700f, 0.860f, 0.95f);
-    colors[ImGuiCol_Separator]       = ImVec4(0.000f, 0.860f, 1.000f, 0.40f);
-    colors[ImGuiCol_SeparatorHovered]= ImVec4(1.000f, 0.100f, 0.750f, 0.85f);
-    colors[ImGuiCol_SeparatorActive] = ImVec4(1.000f, 0.100f, 0.750f, 1.00f);
-    colors[ImGuiCol_Text]            = ImVec4(0.851f, 0.941f, 1.000f, 1.00f);
-    colors[ImGuiCol_TextDisabled]    = ImVec4(0.380f, 0.439f, 0.549f, 1.00f);
-    colors[ImGuiCol_TextSelectedBg]  = ImVec4(0.000f, 0.860f, 1.000f, 0.45f);
-    colors[ImGuiCol_Tab]             = ImVec4(0.047f, 0.055f, 0.090f, 1.00f);
-    colors[ImGuiCol_TabHovered]      = ImVec4(0.000f, 0.450f, 0.600f, 1.00f);
-    colors[ImGuiCol_TabActive]       = ImVec4(0.196f, 0.020f, 0.451f, 1.00f);
+    // Window background — pure black
+    colors[ImGuiCol_WindowBg]        = ImVec4(0.016f, 0.016f, 0.016f, 0.97f);
+    colors[ImGuiCol_ChildBg]         = ImVec4(0.030f, 0.010f, 0.010f, 0.80f);
+    colors[ImGuiCol_PopupBg]         = ImVec4(0.030f, 0.010f, 0.010f, 0.98f);
+    // Border — red
+    colors[ImGuiCol_Border]          = ImVec4(0.900f, 0.050f, 0.050f, 0.90f);
+    colors[ImGuiCol_BorderShadow]    = ImVec4(0.400f, 0.000f, 0.000f, 0.30f);
+    colors[ImGuiCol_FrameBg]         = ImVec4(0.060f, 0.015f, 0.015f, 1.00f);
+    colors[ImGuiCol_FrameBgHovered]  = ImVec4(0.300f, 0.030f, 0.030f, 1.00f);
+    colors[ImGuiCol_FrameBgActive]   = ImVec4(0.550f, 0.050f, 0.050f, 1.00f);
+    colors[ImGuiCol_TitleBg]         = ImVec4(0.016f, 0.016f, 0.016f, 1.00f);
+    colors[ImGuiCol_TitleBgActive]   = ImVec4(0.100f, 0.010f, 0.010f, 1.00f);
+    colors[ImGuiCol_TitleBgCollapsed]= ImVec4(0.016f, 0.016f, 0.016f, 0.70f);
+    colors[ImGuiCol_ScrollbarBg]     = ImVec4(0.016f, 0.016f, 0.016f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrab]   = ImVec4(0.600f, 0.030f, 0.030f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.850f, 0.050f, 0.050f, 1.00f);
+    colors[ImGuiCol_ScrollbarGrabActive]  = ImVec4(1.000f, 0.100f, 0.100f, 1.00f);
+    colors[ImGuiCol_CheckMark]       = ImVec4(1.000f, 0.100f, 0.100f, 1.00f);
+    colors[ImGuiCol_SliderGrab]      = ImVec4(0.900f, 0.050f, 0.050f, 1.00f);
+    colors[ImGuiCol_SliderGrabActive]= ImVec4(1.000f, 0.150f, 0.150f, 1.00f);
+    colors[ImGuiCol_Button]          = ImVec4(0.550f, 0.020f, 0.020f, 1.00f);
+    colors[ImGuiCol_ButtonHovered]   = ImVec4(0.800f, 0.050f, 0.050f, 1.00f);
+    colors[ImGuiCol_ButtonActive]    = ImVec4(1.000f, 0.100f, 0.100f, 1.00f);
+    colors[ImGuiCol_Header]          = ImVec4(0.450f, 0.020f, 0.020f, 0.80f);
+    colors[ImGuiCol_HeaderHovered]   = ImVec4(0.650f, 0.040f, 0.040f, 0.90f);
+    colors[ImGuiCol_HeaderActive]    = ImVec4(0.850f, 0.060f, 0.060f, 1.00f);
+    colors[ImGuiCol_Separator]       = ImVec4(0.800f, 0.050f, 0.050f, 0.50f);
+    colors[ImGuiCol_SeparatorHovered]= ImVec4(1.000f, 0.100f, 0.100f, 0.90f);
+    colors[ImGuiCol_SeparatorActive] = ImVec4(1.000f, 0.100f, 0.100f, 1.00f);
+    colors[ImGuiCol_Text]            = ImVec4(1.000f, 0.130f, 0.130f, 1.00f);
+    colors[ImGuiCol_TextDisabled]    = ImVec4(0.450f, 0.200f, 0.200f, 1.00f);
+    colors[ImGuiCol_TextSelectedBg]  = ImVec4(0.800f, 0.050f, 0.050f, 0.50f);
+    colors[ImGuiCol_Tab]             = ImVec4(0.050f, 0.015f, 0.015f, 1.00f);
+    colors[ImGuiCol_TabHovered]      = ImVec4(0.600f, 0.040f, 0.040f, 1.00f);
+    colors[ImGuiCol_TabActive]       = ImVec4(0.850f, 0.060f, 0.060f, 1.00f);
 
-    style.WindowRounding    = 16.0f;
-    style.ChildRounding     = 14.0f;
-    style.FrameRounding     = 12.0f;
-    style.PopupRounding     = 14.0f;
-    style.ScrollbarRounding = 12.0f;
-    style.GrabRounding      = 12.0f;
-    style.TabRounding       = 10.0f;
-    style.WindowBorderSize  = 2.0f;   // thin neon edge
-    style.ChildBorderSize   = 1.0f;
-    style.FrameBorderSize   = 1.0f;
-    style.PopupBorderSize   = 1.0f;
-    style.WindowPadding     = ImVec2(14.0f, 14.0f);
+    style.WindowRounding    = 10.0f;
+    style.ChildRounding     = 10.0f;
+    style.FrameRounding     = 10.0f;
+    style.PopupRounding     = 10.0f;
+    style.ScrollbarRounding = 8.0f;
+    style.GrabRounding      = 8.0f;
+    style.TabRounding       = 8.0f;
+    style.WindowBorderSize  = 2.0f;   // red edge
+    style.ChildBorderSize   = 2.0f;
+    style.FrameBorderSize   = 2.0f;
+    style.PopupBorderSize   = 2.0f;
+    style.WindowPadding     = ImVec2(12.0f, 12.0f);
     style.FramePadding      = ImVec2(10.0f, 6.0f);
     style.ItemSpacing       = ImVec2(10.0f, 8.0f);
     style.ItemInnerSpacing  = ImVec2(8.0f, 6.0f);
@@ -101,16 +101,16 @@ static void ShadowModzTheme()
 }
 
 // ============================================================
-//  NEON COLOUR HELPERS
+//  RED COLOUR HELPERS
 // ============================================================
-// hue: 0 = white, 1 = cyan, 2 = magenta, 3 = violet
+// hue: 0 = white, 1 = bright red, 2 = deep red, 3 = ember orange
 static ImU32 SmNeonColor(int hue, ImU8 a)
 {
     switch (hue % 4) {
         case 0:  return IM_COL32(255, 255, 255, a);
-        case 1:  return IM_COL32(120, 240, 255, a);
-        case 2:  return IM_COL32(255, 120, 230, a);
-        default: return IM_COL32(180, 150, 255, a);
+        case 1:  return IM_COL32(255,  60,  60, a);
+        case 2:  return IM_COL32(220,  20,  20, a);
+        default: return IM_COL32(255, 120,  70, a);
     }
 }
 
@@ -121,7 +121,7 @@ static void SmGlowRect(ImDrawList* dl, const ImVec2& mn, const ImVec2& mx,
         ImU8 a = (ImU8)(baseA - g * 9 + (ImU8)(14.0f * pulse));
         dl->AddRect(ImVec2(mn.x - g * 2.0f, mn.y - g * 2.0f),
                     ImVec2(mx.x + g * 2.0f, mx.y + g * 2.0f),
-                    IM_COL32(0, 235, 255, a), rounding + g * 2.0f, 0, 1.5f);
+                    IM_COL32(255, 30, 30, a), rounding + g * 2.0f, 0, 1.5f);
     }
 }
 
@@ -142,23 +142,22 @@ static float g_smNextShooter = 2.0f;
 static void SmInitStars(float W, float H)
 {
     for (int i = 0; i < SM_STAR_COUNT; ++i) {
-        g_smStars[i].z   = 0.25f + (float)(rand() % 100) / 100.0f * 0.95f; // depth 0.25..1.20
+        g_smStars[i].z   = 0.25f + (float)(rand() % 100) / 100.0f * 0.95f;
         g_smStars[i].x   = (float)(rand() % 1000) / 1000.0f * W;
         g_smStars[i].y   = (float)(rand() % 1000) / 1000.0f * H;
         g_smStars[i].r   = 0.6f + g_smStars[i].z * 1.8f;
-        g_smStars[i].tw  = 1.2f + (float)(rand() % 200) / 100.0f;  // twinkle speed
-        g_smStars[i].ph  = (float)(rand() % 628) / 100.0f;         // twinkle phase
+        g_smStars[i].tw  = 1.2f + (float)(rand() % 200) / 100.0f;
+        g_smStars[i].ph  = (float)(rand() % 628) / 100.0f;
         g_smStars[i].hue = rand() % 4;
     }
     g_smW = W; g_smH = H; g_smStarsInit = true;
 }
 
-// Three slow-drifting neon clouds, faked with concentric soft rings.
 static void SmDrawNebula(ImDrawList* dl, float W, float H, float t)
 {
-    const int nr[3] = {   0, 200, 120 };
-    const int ng[3] = { 190,  20,  60 };
-    const int nb[3] = { 255, 170, 255 };
+    const int nr[3] = { 160, 120,  90 };
+    const int ng[3] = {  10,   0,   0 };
+    const int nb[3] = {  15,   5,   0 };
     float shortSide = (W < H) ? W : H;
 
     for (int n = 0; n < 3; ++n) {
@@ -185,7 +184,7 @@ static void SmUpdateShooter(float W, float H, float dt)
         g_smShooter.vy      = 260.0f + (float)(rand() % 220);
         g_smShooter.maxLife = 1.10f + (float)(rand() % 60) / 100.0f;
         g_smShooter.life    = g_smShooter.maxLife;
-        g_smShooter.hue     = rand() % 4;
+        g_smShooter.hue     = 1 + rand() % 2;
         g_smNextShooter     = 3.00f + (float)(rand() % 400) / 100.0f;
     }
 
@@ -211,11 +210,11 @@ static void SmDrawShooter(ImDrawList* dl)
     float ux  = g_smShooter.vx * inv, uy = g_smShooter.vy * inv;
     ImVec2 head(g_smShooter.x, g_smShooter.y);
 
-    // fading trail, brightest at the head
     const int SEG = 6;
     for (int s = 0; s < SEG; ++s) {
         float f0 = (float)s / SEG, f1 = (float)(s + 1) / SEG;
-        ImVec2 a(head.x - ux * len * f0, head.y - uy * len * f0);
+        ImVec2 a(head.x - ux * len * f0, head.y - uy * len * f1 * 0.0f - uy * len * f0 * 0.0f);
+        a = ImVec2(head.x - ux * len * f0, head.y - uy * len * f0);
         ImVec2 b(head.x - ux * len * f1, head.y - uy * len * f1);
         ImU8 alpha = (ImU8)(200.0f * k * (1.0f - f0));
         dl->AddLine(a, b, SmNeonColor(g_smShooter.hue, alpha), 2.4f * (1.0f - f0) + 0.6f);
@@ -242,7 +241,6 @@ static void DrawStarfield()
     for (int i = 0; i < SM_STAR_COUNT; ++i) {
         SmStar& s = g_smStars[i];
 
-        // parallax drift — deeper stars move faster
         s.y += (10.0f + 46.0f * s.z) * dt;
         s.x += (4.0f  + 14.0f * s.z) * dt;
         if (s.y > H + 4.0f) { s.y = -4.0f; s.x = (float)(rand() % 1000) / 1000.0f * W; }
@@ -255,7 +253,7 @@ static void DrawStarfield()
 
         dl->AddCircleFilled(ImVec2(s.x, s.y), s.r, SmNeonColor(s.hue, a), 6);
 
-        if (s.z > 0.85f) {   // bright ones get a halo + cross flare
+        if (s.z > 0.85f) {
             dl->AddCircleFilled(ImVec2(s.x, s.y), s.r * 3.4f,
                                 SmNeonColor(s.hue, (ImU8)(a * 0.16f)), 8);
             float fl = s.r * 4.0f * tw;
@@ -310,7 +308,7 @@ static void DrawWindowStars(ImDrawList* dl, const ImVec2& wp, const ImVec2& ws)
 
         ImVec2 p(wp.x + s.fx * ws.x, wp.y + s.fy * ws.y);
         float tw = 0.5f + 0.5f * sinf(t * s.tw + s.ph);
-        ImU8 a = (ImU8)(200.0f * tw * (0.40f + 0.60f * s.z));
+        ImU8 a = (ImU8)(190.0f * tw * (0.40f + 0.60f * s.z));
         if (a < 6) a = 6;
 
         dl->AddCircleFilled(p, s.r, SmNeonColor(s.hue, a), 6);
@@ -318,7 +316,7 @@ static void DrawWindowStars(ImDrawList* dl, const ImVec2& wp, const ImVec2& ws)
             dl->AddCircleFilled(p, s.r * 3.0f, SmNeonColor(s.hue, (ImU8)(a * 0.18f)), 8);
     }
 
-    // faint neon link lines from the cursor to nearby stars
+    // faint red link lines from the cursor to nearby stars
     ImVec2 cur = ImGui::GetIO().MousePos;
     for (int i = 0; i < SM_WIN_STARS; ++i) {
         ImVec2 p(wp.x + g_smWin[i].fx * ws.x, wp.y + g_smWin[i].fy * ws.y);
@@ -326,7 +324,7 @@ static void DrawWindowStars(ImDrawList* dl, const ImVec2& wp, const ImVec2& ws)
         float d  = sqrtf(dx * dx + dy * dy);
         if (d < 90.0f) {
             float o = 1.0f - d / 90.0f;
-            dl->AddLine(cur, p, IM_COL32(0, 230, 255, (ImU8)(85.0f * o)), 1.0f);
+            dl->AddLine(cur, p, IM_COL32(255, 40, 40, (ImU8)(85.0f * o)), 1.0f);
         }
     }
 
@@ -334,7 +332,36 @@ static void DrawWindowStars(ImDrawList* dl, const ImVec2& wp, const ImVec2& ws)
 }
 
 // ============================================================
-//  NEON TAB BUTTON
+//  HEADER BANNER (like the reference shot)
+// ============================================================
+static void RedHeader()
+{
+    float w = ImGui::GetContentRegionAvail().x;
+
+    const char* title = "MODDED BY SHADOW MODZ";
+    ImVec2 ts = ImGui::CalcTextSize(title);
+    ImVec2 p = ImGui::GetCursorScreenPos();
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+
+    // faux-bold red title, centred
+    ImVec2 tp(p.x + (w - ts.x) * 0.5f, p.y);
+    dl->AddText(ImVec2(tp.x + 1.0f, tp.y), IM_COL32(120, 0, 0, 255), title);
+    dl->AddText(tp, IM_COL32(255, 30, 30, 255), title);
+    ImGui::Dummy(ImVec2(w, ts.y + 4.0f));
+
+    // subscribe line: red "Subscribe" + white rest
+    const char* a = "Subscribe";
+    const char* b = "  YouTube | Shadow Modz";
+    ImVec2 as = ImGui::CalcTextSize(a);
+    ImVec2 bs = ImGui::CalcTextSize(b);
+    float sx = p.x + (w - (as.x + bs.x)) * 0.5f;
+    dl->AddText(ImVec2(sx, tp.y + ts.y + 4.0f), IM_COL32(255, 30, 30, 255), a);
+    dl->AddText(ImVec2(sx + as.x, tp.y + ts.y + 4.0f), IM_COL32(255, 255, 255, 255), b);
+    ImGui::Dummy(ImVec2(w, bs.y + 8.0f));
+}
+
+// ============================================================
+//  RED TAB BAR BUTTON
 // ============================================================
 static bool NeonTab(const char* label, bool active)
 {
@@ -344,7 +371,7 @@ static bool NeonTab(const char* label, bool active)
     const ImGuiID id = window->GetID(label);
     const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
 
-    float padX = 20.0f, h = 34.0f;
+    float padX = 18.0f, h = 32.0f;
     ImVec2 pos = window->DC.CursorPos;
     ImVec2 size(label_size.x + padX * 2.0f, h);
     ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
@@ -356,46 +383,25 @@ static bool NeonTab(const char* label, bool active)
     bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
 
     ImDrawList* dl = window->DrawList;
-    float r = h * 0.5f;
-    float t = (float)ImGui::GetTime();
-    float pulse = 0.5f + 0.5f * sinf(t * 3.2f);
+    float r = 6.0f;
 
-    if (active)
-        SmGlowRect(dl, bb.Min, bb.Max, r, 46, pulse);
-
-    ImU32 bg = active ? IM_COL32(12, 28, 50, 235)
-             : hovered ? IM_COL32(10, 20, 34, 200)
-                       : IM_COL32(7, 10, 20, 185);
+    ImU32 bg = active ? IM_COL32(210, 10, 10, 255)
+             : hovered ? IM_COL32(60, 5, 5, 235)
+                       : IM_COL32(20, 2, 2, 220);
     dl->AddRectFilled(bb.Min, bb.Max, bg, r);
-
-    ImU32 edge = active ? IM_COL32(0, 240, 255, 255)
-               : hovered ? IM_COL32(255, 60, 200, 205)
-                         : IM_COL32(90, 120, 170, 150);
-    dl->AddRect(bb.Min, bb.Max, edge, r, 0, active ? 2.2f : 1.4f);
+    dl->AddRect(bb.Min, bb.Max,
+                active ? IM_COL32(255, 60, 60, 255) : IM_COL32(200, 20, 20, 200),
+                r, 0, active ? 2.2f : 1.5f);
 
     ImVec2 txt(bb.Min.x + (size.x - label_size.x) * 0.5f,
                bb.Min.y + (size.y - label_size.y) * 0.5f);
-    if (active) {
-        dl->AddText(ImVec2(txt.x, txt.y + 1.0f), IM_COL32(0, 235, 255, 70), label);
-        dl->AddText(ImVec2(txt.x, txt.y + 2.0f), IM_COL32(0, 235, 255, 34), label);
-    }
-    ImU32 tc = active ? IM_COL32(190, 250, 255, 255)
-             : hovered ? IM_COL32(255, 190, 245, 255)
-                       : IM_COL32(150, 165, 195, 255);
-    dl->AddText(txt, tc, label);
-
-    if (active) {   // neon underline accent
-        float uw = label_size.x * (0.6f + 0.4f * pulse);
-        dl->AddLine(ImVec2(bb.Min.x + (size.x - uw) * 0.5f, bb.Max.y - 5.0f),
-                    ImVec2(bb.Min.x + (size.x + uw) * 0.5f, bb.Max.y - 5.0f),
-                    IM_COL32(255, 40, 200, 235), 2.0f);
-    }
-
+    dl->AddText(txt, active ? IM_COL32(255, 255, 255, 255)
+                            : IM_COL32(255, 60, 60, 255), label);
     return pressed;
 }
 
 // ============================================================
-//  NEON TOGGLE
+//  RED TOGGLE (kept for the floating SPEED TIMER row)
 // ============================================================
 void NeonToggle(const char* label, bool* v)
 {
@@ -422,45 +428,25 @@ void NeonToggle(const char* label, bool* v)
     anim = ImLerp(anim, *v ? 1.0f : 0.0f, ImGui::GetIO().DeltaTime * 14.0f);
 
     ImDrawList* dl = window->DrawList;
-    float t = (float)ImGui::GetTime();
-    float pulse = 0.5f + 0.5f * sinf(t * 4.0f);
 
-    ImU32 bg = *v ? IM_COL32(0, 200, 240, 235) : IM_COL32(18, 22, 34, 255);
+    ImU32 bg = *v ? IM_COL32(210, 10, 10, 255) : IM_COL32(30, 30, 30, 255);
     dl->AddRectFilled(bb.Min, bb.Max, bg, radius);
     dl->AddRect(bb.Min, bb.Max,
-                *v ? IM_COL32(0, 240, 255, 255) : IM_COL32(70, 85, 120, 255),
+                *v ? IM_COL32(255, 60, 60, 255) : IM_COL32(120, 120, 120, 255),
                 radius, 0, 2.0f);
 
-    if (*v)
-        SmGlowRect(dl, bb.Min, bb.Max, radius, 44, pulse);
-
-    // Knob — dark core with a neon rim
     float knob_x = bb.Min.x + radius + (w - h) * anim;
     ImVec2 knob_center(knob_x, bb.Min.y + radius);
-    dl->AddCircleFilled(knob_center, radius - 3.0f, IM_COL32(8, 12, 22, 255), 24);
-    dl->AddCircle(knob_center, radius - 3.0f,
-                  *v ? IM_COL32(0, 240, 255, 255) : IM_COL32(110, 125, 160, 255), 24, 2.0f);
-    dl->AddCircleFilled(knob_center, 2.5f,
-                        *v ? IM_COL32(255, 60, 210, 255) : IM_COL32(70, 80, 110, 255), 12);
+    dl->AddCircleFilled(knob_center, radius - 3.0f, IM_COL32(255, 255, 255, 255), 24);
 
-    // Energy spark trailing the knob while ON
-    if (*v && anim > 0.9f) {
-        float wag = sinf(t * 6.0f) * 3.0f;
-        ImVec2 sp(bb.Max.x - 3.0f, bb.Min.y - 1.0f);
-        dl->AddLine(sp, ImVec2(sp.x + 5.0f + wag, sp.y - 7.0f), IM_COL32(0, 235, 255, 220), 2.0f);
-        dl->AddLine(ImVec2(sp.x + 5.0f + wag, sp.y - 7.0f),
-                    ImVec2(sp.x + 1.0f + wag, sp.y - 12.0f), IM_COL32(255, 60, 210, 220), 2.0f);
-    }
-
-    // Label
     ImGui::SameLine();
     ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (h - label_size.y) * 0.5f);
-    ImGui::TextColored(*v ? ImVec4(0.60f, 0.98f, 1.00f, 1.00f)
-                          : ImVec4(0.72f, 0.78f, 0.88f, 1.00f), "%s", label);
+    ImGui::TextColored(*v ? ImVec4(1.00f, 0.25f, 0.25f, 1.00f)
+                          : ImVec4(0.85f, 0.85f, 0.85f, 1.00f), "%s", label);
 }
 
 // ============================================================
-//  MOD MENU ROW (52px, rounded, neon orb icon + toggle)
+//  MOD MENU ROW — outlined rounded button "NAME: ON/OFF" (reference style)
 // ============================================================
 static bool ModRow(const char* label, bool* v)
 {
@@ -471,7 +457,7 @@ static bool ModRow(const char* label, bool* v)
     ImVec2 pos = window->DC.CursorPos;
     float avail = ImGui::GetContentRegionAvail().x;
     if (avail < 100.0f) avail = 300.0f;
-    ImVec2 size(avail, 52.0f);
+    ImVec2 size(avail, 46.0f);
     ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
     ImGui::ItemSize(bb, 4.0f);
     if (!ImGui::ItemAdd(bb, id)) return false;
@@ -481,64 +467,36 @@ static bool ModRow(const char* label, bool* v)
     if (pressed) *v = !*v;
 
     ImDrawList* dl = window->DrawList;
-    float t = (float)ImGui::GetTime();
-    float pulse = 0.5f + 0.5f * sinf(t * 3.0f);
 
-    ImU32 bg = hovered ? IM_COL32(18, 30, 50, 215) : IM_COL32(9, 13, 24, 190);
-    dl->AddRectFilled(bb.Min, bb.Max, bg, 26.0f);
+    ImU32 bg = *v     ? IM_COL32(60, 4, 4, 235)
+             : hovered ? IM_COL32(35, 2, 2, 220)
+                       : IM_COL32(12, 1, 1, 210);
+    dl->AddRectFilled(bb.Min, bb.Max, bg, 23.0f);
+    dl->AddRect(bb.Min, bb.Max,
+                *v ? IM_COL32(255, 50, 50, 255) : IM_COL32(200, 20, 20, 220),
+                23.0f, 0, 2.0f);
 
-    ImU32 edge = *v     ? IM_COL32(0, 235, 255, 235)
-               : hovered ? IM_COL32(255, 60, 200, 205)
-                         : IM_COL32(70, 90, 130, 150);
-    dl->AddRect(bb.Min, bb.Max, edge, 26.0f, 0, *v ? 2.2f : 1.5f);
-    if (*v)
-        SmGlowRect(dl, bb.Min, bb.Max, 26.0f, 34, pulse);
-
-    // Neon orb icon with a rotating arc
-    ImVec2 icon_c(bb.Min.x + 30.0f, bb.Min.y + 26.0f);
-    ImU32 ic = *v ? IM_COL32(0, 240, 255, 255) : IM_COL32(110, 130, 170, 255);
-    dl->AddCircleFilled(icon_c, 4.5f, ic, 16);
-    dl->AddCircle(icon_c, 9.0f,
-                  *v ? IM_COL32(255, 40, 200, 225) : IM_COL32(70, 90, 130, 200), 24, 1.6f);
-    float a0 = t * (*v ? 2.4f : 0.6f);
-    dl->PathArcTo(icon_c, 13.0f, a0, a0 + 1.5f, 12);
-    dl->PathStroke(*v ? IM_COL32(0, 240, 255, 205) : IM_COL32(80, 100, 140, 160), 0, 1.8f);
-    if (*v)
-        dl->AddCircleFilled(icon_c, 16.0f, IM_COL32(0, 220, 255, (ImU8)(26 + 20 * pulse)), 20);
-
-    // Label
-    dl->AddText(ImVec2(bb.Min.x + 55.0f, bb.Min.y + 18.0f),
-                *v ? IM_COL32(195, 250, 255, 255) : IM_COL32(180, 190, 215, 255), label);
-
-    // Right-side toggle
-    float sw = 48.0f, sh = 24.0f;
-    ImVec2 tpos(bb.Max.x - sw - 14.0f, bb.Min.y + (52.0f - sh) * 0.5f);
-    ImU32 tbg = *v ? IM_COL32(0, 200, 240, 235) : IM_COL32(24, 28, 42, 255);
-    dl->AddRectFilled(tpos, ImVec2(tpos.x + sw, tpos.y + sh), tbg, sh * 0.5f);
-    dl->AddRect(tpos, ImVec2(tpos.x + sw, tpos.y + sh),
-                *v ? IM_COL32(0, 240, 255, 255) : IM_COL32(70, 85, 120, 255), sh * 0.5f, 0, 1.5f);
-    float knob_x = tpos.x + sh * 0.5f + (sw - sh) * (*v ? 1.0f : 0.0f);
-    ImVec2 knob_c(knob_x, tpos.y + sh * 0.5f);
-    dl->AddCircleFilled(knob_c, sh * 0.5f - 2.0f, IM_COL32(8, 12, 22, 255), 20);
-    dl->AddCircle(knob_c, sh * 0.5f - 2.0f,
-                  *v ? IM_COL32(0, 240, 255, 255) : IM_COL32(110, 125, 160, 255), 20, 1.6f);
-    dl->AddCircleFilled(knob_c, 2.5f,
-                        *v ? IM_COL32(255, 60, 210, 255) : IM_COL32(70, 80, 110, 255), 12);
+    char buf[128];
+    snprintf(buf, sizeof(buf), "%s: %s", label, *v ? "ON" : "OFF");
+    ImVec2 ts = ImGui::CalcTextSize(buf);
+    ImVec2 tp(bb.Min.x + (size.x - ts.x) * 0.5f, bb.Min.y + (size.y - ts.y) * 0.5f);
+    dl->AddText(tp, *v ? IM_COL32(255, 80, 80, 255) : IM_COL32(230, 30, 30, 255), buf);
 
     return pressed;
 }
 
 // ============================================================
-//  NEON CLOSE BUTTON
+//  BOTTOM BUTTONS — black box, white text (HIDE / CLOSE)
 // ============================================================
-static bool NeonCloseButton(const char* label)
+static bool NeonCloseButton(const char* label, float width = -1.0f)
 {
     ImGuiWindow* window = ImGui::GetCurrentWindow();
     if (window->SkipItems) return false;
 
     ImGuiID id = window->GetID(label);
     ImVec2 pos = window->DC.CursorPos;
-    ImVec2 size(140.0f, 44.0f);
+    float wdt = width > 0.0f ? width : ImGui::GetContentRegionAvail().x;
+    ImVec2 size(wdt, 44.0f);
     ImRect bb(pos, ImVec2(pos.x + size.x, pos.y + size.y));
     ImGui::ItemSize(bb, 4.0f);
     if (!ImGui::ItemAdd(bb, id)) return false;
@@ -546,25 +504,15 @@ static bool NeonCloseButton(const char* label)
     bool hovered, held;
     bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held);
     ImDrawList* dl = window->DrawList;
-    float pulse = 0.5f + 0.5f * sinf((float)ImGui::GetTime() * 3.4f);
 
-    ImU32 bg = hovered ? IM_COL32(62, 0, 32, 235) : IM_COL32(32, 0, 20, 210);
-    dl->AddRectFilled(bb.Min, bb.Max, bg, 22.0f);
-
-    for (int g = 2; g >= 1; --g)
-        dl->AddRect(ImVec2(bb.Min.x - g * 2.5f, bb.Min.y - g * 2.5f),
-                    ImVec2(bb.Max.x + g * 2.5f, bb.Max.y + g * 2.5f),
-                    IM_COL32(255, 40, 190, (ImU8)(24 - g * 8 + 12 * pulse)),
-                    22.0f + g * 2.5f, 0, 1.5f);
-
-    dl->AddRect(bb.Min, bb.Max,
-                hovered ? IM_COL32(255, 90, 215, 255) : IM_COL32(255, 40, 190, 220),
-                22.0f, 0, 2.4f);
+    dl->AddRectFilled(bb.Min, bb.Max,
+                      hovered ? IM_COL32(40, 4, 4, 255) : IM_COL32(8, 8, 8, 250), 6.0f);
+    dl->AddRect(bb.Min, bb.Max, IM_COL32(200, 20, 20, 220), 6.0f, 0, 2.0f);
 
     ImVec2 ts = ImGui::CalcTextSize(label);
-    ImVec2 tp(bb.Min.x + (size.x - ts.x) * 0.5f, bb.Min.y + (size.y - ts.y) * 0.5f);
-    dl->AddText(ImVec2(tp.x, tp.y + 1.0f), IM_COL32(255, 40, 190, 90), label);
-    dl->AddText(tp, IM_COL32(255, 235, 250, 255), label);
+    dl->AddText(ImVec2(bb.Min.x + (size.x - ts.x) * 0.5f,
+                       bb.Min.y + (size.y - ts.y) * 0.5f),
+                IM_COL32(255, 255, 255, 255), label);
     return pressed;
 }
 
@@ -642,6 +590,8 @@ namespace Settings {
     static int Tab = 1;
 }
 
+static bool g_MenuHidden = false;
+
 bool clearMousePos = true;
 bool initImGui = false;
 
@@ -671,10 +621,19 @@ inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
     ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
     ImGui::NewFrame();
 
-    // ---- Touch input ----
-    int touchCount = ((int (*)())(Class_Input__get_touchCount))();
+    // ---- Touch input (guarded: never call an unresolved il2cpp method) ----
+    static uintptr_t s_touchCountFn = 0, s_getTouchFn = 0;
+    static bool s_touchResolved = false;
+    if (!s_touchResolved && g_il2cppReady) {
+        s_touchCountFn = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("UnityEngine.dll"),
+                        OBFUSCATE("UnityEngine"), OBFUSCATE("Input"), OBFUSCATE("get_touchCount"), 0);
+        s_getTouchFn   = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("UnityEngine.dll"),
+                        OBFUSCATE("UnityEngine"), OBFUSCATE("Input"), OBFUSCATE("GetTouch"), 1);
+        s_touchResolved = (s_touchCountFn != 0 && s_getTouchFn != 0);
+    }
+    int touchCount = s_touchResolved ? ((int (*)())s_touchCountFn)() : 0;
     if (touchCount > 0) {
-        UnityEngine_Touch_Fields touch = ((UnityEngine_Touch_Fields(*)(int))(Class_Input__GetTouch))(0);
+        UnityEngine_Touch_Fields touch = ((UnityEngine_Touch_Fields(*)(int))s_getTouchFn)(0);
         float reverseY = io.DisplaySize.y - touch.m_Position.fields.y;
         io.MousePos = ImVec2(touch.m_Position.fields.x, reverseY);
         if (!isTouching) touchStartTime = ImGui::GetTime();
@@ -716,18 +675,35 @@ inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
         ImGui::End();
     }
 
+    if (g_MenuHidden) {
+        ImGui::SetNextWindowPos(ImVec2(20.0f, 20.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowBgAlpha(0.0f);
+        if (ImGui::Begin("##ShadowFloat", nullptr,
+            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize |
+            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+        {
+            if (NeonCloseButton("MOD", 90.0f)) g_MenuHidden = false;
+        }
+        ImGui::End();
+    }
+    if (!g_MenuHidden) {
     // ---- Main Shadow Modz menu ----
     ImGui::SetNextWindowSize(ImVec2((float)g_GlWidth * 0.62f,
                                     (float)g_GlHeight * 0.72f),
                              ImGuiCond_Once);
+    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+                            ImGuiCond_Always, ImVec2(0.5f, 0.5f));
     if (ImGui::Begin("SHADOW MODZ", nullptr,
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoBringToFrontOnFocus |
         ImGuiWindowFlags_NoCollapse))
     {
-        // ---- In-window moving starfield (drawn behind the widgets) ----
         DrawWindowStars(ImGui::GetWindowDrawList(),
                         ImGui::GetCursorScreenPos(),
                         ImGui::GetContentRegionAvail());
+
+        RedHeader();
 
         static int activeTab = 0;
 
@@ -783,14 +759,14 @@ inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
         ImGui::Separator();
         ImGui::Spacing();
 
-        // Close button centered
-        float ww = ImGui::GetWindowWidth();
-        ImGui::SetCursorPosX((ww - 140.0f) * 0.5f);
-        if (NeonCloseButton("CLOSE")) {
-            // Apna close logic yahan — e.g. ShowMenu = false;
-        }
+        // HIDE / CLOSE bottom buttons
+        float w2 = (ImGui::GetContentRegionAvail().x - 12.0f) * 0.5f;
+        if (NeonCloseButton("HIDE", w2)) g_MenuHidden = true;
+        ImGui::SameLine(0.0f, 12.0f);
+        if (NeonCloseButton("CLOSE", w2)) g_MenuHidden = true;
     }
     ImGui::End();
+    } // if (!g_MenuHidden)
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -804,7 +780,13 @@ typedef unsigned long DWORD;
 static uintptr_t libBase;
 
 inline void StartGUI() {
-    void *ptr_eglSwapBuffer = DobbySymbolResolver("/system/lib/libEGL.so", "eglSwapBuffers");
+    void *ptr_eglSwapBuffer = DobbySymbolResolver("/system/lib64/libEGL.so", "eglSwapBuffers");
+    if (ptr_eglSwapBuffer == nullptr)
+        ptr_eglSwapBuffer = DobbySymbolResolver("/system/lib/libEGL.so", "eglSwapBuffers");
+    if (ptr_eglSwapBuffer == nullptr) {
+        void *h = dlopen("libEGL.so", RTLD_NOW);
+        if (h) ptr_eglSwapBuffer = dlsym(h, "eglSwapBuffers");
+    }
     if (ptr_eglSwapBuffer != nullptr) {
         DobbyHook((void *)ptr_eglSwapBuffer, (void *)hook_eglSwapBuffers,
                   (void **)&old_eglSwapBuffers);
@@ -817,25 +799,35 @@ void hack_thread() {
     pid_t pid = getpid();
     LOGD("Hack Thread initiated for PID: %i", pid);
 
+    int waits = 0;
     do {
         il2cpp_base = get_module_base(pid, "libil2cpp.so");
-        sleep(1);
-    } while (il2cpp_base == 0);
+        if (il2cpp_base == 0) sleep(1);
+    } while (il2cpp_base == 0 && ++waits < 30);
 
-    LOGD("libil2cpp.so found at address: 0x%" PRIxPTR, il2cpp_base);
-    Il2CppAttach();
-
-    DobbyHook(Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
-                                    OBFUSCATE("COW"),
-                                    OBFUSCATE("GameConfig"),
-                                    OBFUSCATE("get_ResetGuest"), 0),
-              (void *) ResetGuest, (void **) &_ResetGuest);
-
-    DobbyHook(Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
-                                    OBFUSCATE("COW.GamePlay"),
-                                    OBFUSCATE("Weapon"),
-                                    OBFUSCATE("IsContinuousGen"), 0),
-              (void *) IsContinuousGen, (void **) &_IsContinuousGen);
-
+    if (il2cpp_base != 0) {
+        LOGD("libil2cpp.so found at address: 0x%" PRIxPTR, il2cpp_base);
+        Il2CppAttach();
+        if (g_il2cppReady) {
+            uintptr_t off1 = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
+                                        OBFUSCATE("COW"), OBFUSCATE("GameConfig"),
+                                        OBFUSCATE("get_ResetGuest"), 0);
+            if (off1) DobbyHook((void *)off1, (void *)ResetGuest, (void **)&_ResetGuest);
+            uintptr_t off2 = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
+                                        OBFUSCATE("COW.GamePlay"), OBFUSCATE("Weapon"),
+                                        OBFUSCATE("IsContinuousGen"), 0);
+            if (off2) DobbyHook((void *)off2, (void *)IsContinuousGen, (void **)&_IsContinuousGen);
+            uintptr_t offT = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("UnityEngine.dll"),
+                                        OBFUSCATE("UnityEngine"), OBFUSCATE("Input"),
+                                        OBFUSCATE("get_touchCount"), 0);
+            uintptr_t offC = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("UnityEngine.dll"),
+                                        OBFUSCATE("UnityEngine"), OBFUSCATE("Camera"),
+                                        OBFUSCATE("get_main"), 0);
+            g_GameReady = (off1 && off2 && offT && offC);
+        }
+    } else {
+        LOGD("libil2cpp.so not found - running menu-only mode");
+    }
+    LOGD("game-ready=%d", (int)g_GameReady);
     StartGUI();
 }

@@ -253,6 +253,7 @@ float active = 0.0f;
 float desactive = 0.0f;
 
 void UpdateSpeedhack() {
+    if (!g_GameReady) return;
     if (Enable) {
         void* Simulation = GetSimulationTimer();
      if (Simulation != nullptr) {
@@ -391,6 +392,7 @@ inline void DrawAIMBOT(float screenWidth, float screenHeight) {
 }
 
 inline void DrawESP(float screenWidth, float screenHeight) {
+    if (!g_GameReady) return;
  ImDrawList*draw = ImGui::GetBackgroundDrawList();
     if (!draw) return;   
     

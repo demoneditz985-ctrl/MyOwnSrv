@@ -1,4 +1,5 @@
 bool Enable;
+inline bool g_GameReady = false;
 int AimCheck = 0;
 int AimType = 0;
 int AimWhen = 1;
