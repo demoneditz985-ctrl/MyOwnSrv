@@ -1,0 +1,6 @@
++ keytool -genkeypair -keystore shadow.keystore -storepass android -keypass android -alias shadowmodz -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=Shadow Modz, OU=Dev, O=ShadowModz, C=IN'
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) with a validity of 10,000 days
+	for: CN=Shadow Modz, OU=Dev, O=ShadowModz, C=IN
++ /usr/local/lib/android/sdk/build-tools/34.0.0/zipalign -f 4 unaligned.apk aligned.apk
++ /usr/local/lib/android/sdk/build-tools/34.0.0/apksigner sign --ks shadow.keystore --storepass android --keypass android --out ShadowModz.apk aligned.apk
+Unsupported option: --storepass. See --help for supported options.
