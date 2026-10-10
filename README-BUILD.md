@@ -12,6 +12,16 @@ Everything needed to build your own copy of the mod menu APK.
 - `red_ui_source.cpp` — the red/black UI code as one standalone reference file
 - `preview/shadow-modz-alltabs.png` — how the menu looks (all 4 tabs)
 
+## Build method 0 — on your PHONE with AIDE (Android)
+1. Unzip this package on your phone (e.g. `/storage/emulated/0/ShadowModz/`).
+2. Open **AIDE** → open project → choose the `src/PAPAJI EVIEL SRC` folder
+   (AIDE detects the `app/` Android project inside).
+3. If AIDE asks to install the **NDK / native code support**, accept.
+4. Press **Run/Build**. AIDE compiles `app/src/main/jni` with `Android.mk`
+   (arm64-v8a + armeabi-v7a) and packages the signed APK on-device.
+   No renames or symlinks needed anymore — all include paths are fixed.
+   The prebuilt `Dobby/<abi>/libdobby.a` and the loader dex are included.
+
 ## Build method 1 — GitHub (easiest, no PC setup)
 1. Upload this whole folder as a new GitHub repo (keep `.github/`).
 2. Push any commit. The workflow installs JDK 17 + NDK r25, builds `libVM.so`
