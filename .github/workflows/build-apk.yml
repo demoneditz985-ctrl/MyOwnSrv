@@ -114,3 +114,14 @@ jobs:
         with:
           name: ShadowModz-apk
           path: build-apk/ShadowModz.apk
+
+      - name: Deliver APK via branch (downloadable through git)
+        run: |
+          mkdir -p release
+          cp build-apk/ShadowModz.apk release/ShadowModz.apk
+          cp build-apk/unaligned.apk /dev/null 2>/dev/null || true
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git add -f release/ShadowModz.apk
+          git commit -q -m "ci: deliver ShadowModz.apk [skip ci]"
+          git push origin "HEAD:${{ github.ref_name }}"
