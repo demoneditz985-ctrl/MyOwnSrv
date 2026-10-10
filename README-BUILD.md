@@ -45,6 +45,12 @@ Everything needed to build your own copy of the mod menu APK.
    apksigner sign --ks ks --ks-pass pass:android --key-pass pass:android aligned.apk
    ```
 
+
+## Loader app note
+The Java loader is shipped prebuilt: `app/build/bin/classes.dex` +
+`app/build/bin/resources.ap_` (binary manifest/res). The workflow unpacks
+these and adds your freshly built `libVM.so` — no Java sources needed.
+
 ## Make it your own
 - Menu look: `jni/Main.cpp` (red theme block at the top of the UI section,
   also copied in `red_ui_source.cpp`) — colors in `ShadowModzTheme()`,
