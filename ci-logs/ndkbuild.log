@@ -1,19 +1,50 @@
-[arm64-v8a] Compile++      : VM <= Main.cpp
-In file included from /tmp/vmbuild/jni/Main.cpp:14:
-In file included from /tmp/vmbuild/jni/Struct/Gui.hpp:19:
-/tmp/vmbuild/jni/Struct/ESP.h:56:10: fatal error: 'Unity/unity.h' file not found
-#include "Unity/unity.h"
-         ^~~~~~~~~~~~~~~
-1 error generated.
-make: *** [/usr/local/lib/android/sdk/ndk/25.2.9519653/build/core/build-binary.mk:424: /tmp/vmbuild/obj/local/arm64-v8a/objs/VM/Main.o] Error 1
-make: *** Waiting for unfinished jobs....
 [arm64-v8a] Compile++      : VM <= imgui_demo.cpp
 [armeabi-v7a] Compile++ arm  : VM <= Main.cpp
-In file included from /tmp/vmbuild/jni/Main.cpp:14:
-In file included from /tmp/vmbuild/jni/Struct/Gui.hpp:19:
-/tmp/vmbuild/jni/Struct/ESP.h:56:10: fatal error: 'Unity/unity.h' file not found
-#include "Unity/unity.h"
-         ^~~~~~~~~~~~~~~
-1 error generated.
-make: *** [/usr/local/lib/android/sdk/ndk/25.2.9519653/build/core/build-binary.mk:424: /tmp/vmbuild/obj/local/armeabi-v7a/objs/VM/Main.o] Error 1
+[arm64-v8a] Compile++      : VM <= Main.cpp
+[arm64-v8a] Compile++      : VM <= imgui_impl_android.cpp
+[arm64-v8a] Compile++      : VM <= imgui_impl_opengl3.cpp
+[arm64-v8a] Compile++      : VM <= imgui_draw.cpp
+[arm64-v8a] Compile        : VM <= xdl.c
+[arm64-v8a] Compile        : VM <= xdl_iterate.c
+[arm64-v8a] Compile        : VM <= xdl_linker.c
+[arm64-v8a] Compile        : VM <= xdl_lzma.c
+[arm64-v8a] Compile        : VM <= xdl_util.c
 [arm64-v8a] Compile++      : VM <= imgui.cpp
+[arm64-v8a] Compile++      : VM <= KittyArm64.cpp
+[arm64-v8a] Compile++      : VM <= imgui_tables.cpp
+[arm64-v8a] Compile++      : VM <= KittyMemory.cpp
+[arm64-v8a] Compile++      : VM <= KittyScanner.cpp
+[arm64-v8a] Compile++      : VM <= KittyUtils.cpp
+[arm64-v8a] Compile++      : VM <= MemoryBackup.cpp
+[arm64-v8a] Compile++      : VM <= And64InlineHook.cpp
+[arm64-v8a] Compile++      : VM <= MemoryPatch.cpp
+[arm64-v8a] Compile++      : VM <= Il2Cpp.cpp
+[arm64-v8a] Compile++      : VM <= imgui_widgets.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_impl_android.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_impl_opengl3.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_demo.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_tables.cpp
+[armeabi-v7a] Compile arm    : VM <= xdl.c
+[armeabi-v7a] Compile arm    : VM <= xdl_iterate.c
+[armeabi-v7a] Compile arm    : VM <= xdl_linker.c
+[armeabi-v7a] Compile arm    : VM <= xdl_lzma.c
+[armeabi-v7a] Compile arm    : VM <= xdl_util.c
+[armeabi-v7a] Compile++ arm  : VM <= KittyArm64.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_draw.cpp
+[armeabi-v7a] Compile++ arm  : VM <= KittyMemory.cpp
+[armeabi-v7a] Compile++ arm  : VM <= KittyScanner.cpp
+[armeabi-v7a] Compile++ arm  : VM <= MemoryBackup.cpp
+[armeabi-v7a] Compile++ arm  : VM <= KittyUtils.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui_widgets.cpp
+[armeabi-v7a] Compile++ arm  : VM <= SubstrateDebug.cpp
+[armeabi-v7a] Compile++ arm  : VM <= MemoryPatch.cpp
+[armeabi-v7a] Compile++ arm  : VM <= SubstratePosixMemory.cpp
+[armeabi-v7a] Compile++ arm  : VM <= SubstrateHook.cpp
+[armeabi-v7a] Compile arm    : VM <= hde64.c
+[armeabi-v7a] Compile++ arm  : VM <= SymbolFinder.cpp
+[arm64-v8a] SharedLibrary  : libVM.so
+[arm64-v8a] Install        : libVM.so => libs/arm64-v8a/libVM.so
+[armeabi-v7a] Compile++ arm  : VM <= Il2Cpp.cpp
+[armeabi-v7a] Compile++ arm  : VM <= imgui.cpp
+[armeabi-v7a] SharedLibrary  : libVM.so
+[armeabi-v7a] Install        : libVM.so => libs/armeabi-v7a/libVM.so
