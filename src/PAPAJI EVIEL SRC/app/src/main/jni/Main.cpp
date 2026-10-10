@@ -811,10 +811,18 @@ void hack_thread() {
         if (il2cpp_base == 0) sleep(1);
     } while (il2cpp_base == 0 && ++waits < 30);
 
+    // Menu/GL hook starts first and never touches il2cpp — safe on any game
+    StartGUI();
+
     if (il2cpp_base != 0) {
         LOGD("libil2cpp.so found at address: 0x%" PRIxPTR, il2cpp_base);
         Il2CppAttach();
-        if (g_il2cppReady) {
+        // Wait until the il2cpp runtime finished init (domain + assemblies valid).
+        // Introspecting earlier (e.g. while the FF logo shows) hits a NULL domain
+        // inside libil2cpp.so and kills the game.
+        int aw = 0;
+        while (g_il2cppReady && !Il2CppIsAssembliesLoaded() && aw < 120) { sleep(1); aw++; }
+        if (g_il2cppReady && Il2CppIsAssembliesLoaded()) {
             uintptr_t off1 = (uintptr_t)Il2CppGetMethodOffset(OBFUSCATE("Assembly-CSharp.dll"),
                                         OBFUSCATE("COW"), OBFUSCATE("GameConfig"),
                                         OBFUSCATE("get_ResetGuest"), 0);
@@ -835,5 +843,4 @@ void hack_thread() {
         LOGD("libil2cpp.so not found - running menu-only mode");
     }
     LOGD("game-ready=%d", (int)g_GameReady);
-    StartGUI();
 }

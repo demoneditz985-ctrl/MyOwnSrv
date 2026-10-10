@@ -531,17 +531,16 @@ bool IsContinuousGen(void *instance) {
     if (instance != NULL && Enable && SniperFast) {
         return true;
     }
-    return _IsContinuousGen(instance);
+    return _IsContinuousGen ? _IsContinuousGen(instance) : false;
 }
 
 bool(*_ResetGuest)(void* _this);
 bool ResetGuest(void* _this){
-    if (_this != NULL) {
-        if (Reset) {
-            return true; 
-            remove(OBFUSCATE("/storage/emulated/0/com.garena.msdk/guest100067.dat"));
-        }
+    if (_this != NULL && Reset) {
+        remove(OBFUSCATE("/storage/emulated/0/com.garena.msdk/guest100067.dat"));
+        return true;
     }
+    return _ResetGuest ? _ResetGuest(_this) : false;
 }
 
     

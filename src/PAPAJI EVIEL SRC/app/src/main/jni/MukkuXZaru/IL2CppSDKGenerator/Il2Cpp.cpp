@@ -101,8 +101,11 @@ Il2CppString *Il2CppString::Create(const wchar_t *s, int len) {
 
 void *Il2CppGetImageByName(const char *image) {
 	if (!g_il2cppReady) return 0;
-	size_t size;
-	void **assemblies = il2cpp_domain_get_assemblies(il2cpp_domain_get(), &size);
+	void *domain = il2cpp_domain_get();
+	if (!domain) return 0;
+	size_t size = 0;
+	void **assemblies = il2cpp_domain_get_assemblies(domain, &size);
+	if (!assemblies) return 0;
 	for(int i = 0; i < size; ++i) {
 		void *img = (void *)il2cpp_assembly_get_image(assemblies[i]);
 		const char *img_name = il2cpp_image_get_name(img);
@@ -310,8 +313,11 @@ size_t Il2CppGetStaticFieldOffset(const char *image, const char *namespaze, cons
 }
 
 bool Il2CppIsAssembliesLoaded() {
-	size_t size;
-	void **assemblies = il2cpp_domain_get_assemblies(il2cpp_domain_get(), &size);
+	if (!g_il2cppReady) return false;
+	void *domain = il2cpp_domain_get();
+	if (!domain) return false;
+	size_t size = 0;
+	void **assemblies = il2cpp_domain_get_assemblies(domain, &size);
 	return size != 0 && assemblies != 0;
 }
 
