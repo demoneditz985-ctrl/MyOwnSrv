@@ -720,6 +720,11 @@ inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
         ImGui::Separator();
         ImGui::Spacing();
 
+        // Scrollable tab content (keeps HIDE/CLOSE visible on small screens)
+        ImGui::BeginChild("##TabContent",
+                          ImVec2(0, ImGui::GetContentRegionAvail().y - 78.0f),
+                          false, ImGuiWindowFlags_NoBackground);
+
         // ===== AIM =====
         if (activeTab == 0) {
             ModRow("Enable AimBot", &Aimbot);
@@ -751,9 +756,10 @@ inline EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
         else {
             ModRow("Speedhack", &SpeedHack);
             ImGui::Spacing();
-            ImGui::TextColored(ImVec4(0.00f, 0.92f, 1.00f, 1.0f), "</> Dev: SHADOW MODZ");
-            ImGui::TextColored(ImVec4(1.00f, 0.35f, 0.85f, 1.0f), "TELEGRAM: @ShadowModz");
+            ImGui::TextColored(ImVec4(1.00f, 0.25f, 0.25f, 1.0f), "</> Dev: SHADOW MODZ");
+            ImGui::TextColored(ImVec4(0.85f, 0.85f, 0.85f, 1.0f), "TELEGRAM: @ShadowModz");
         }
+        ImGui::EndChild();
 
         ImGui::Spacing();
         ImGui::Separator();
