@@ -43,6 +43,8 @@ jobs:
           # but the folder on disk is lowercase "imgui".
           ln -sfn imgui /tmp/vmbuild/jni/ImGui
           ln -sfn Dobby /tmp/vmbuild/jni/dobby
+          ln -sfn Unity.h /tmp/vmbuild/jni/Unity/unity.h
+          ln -sfn Il2Cpp.h /tmp/vmbuild/jni/MukkuXZaru/IL2CppSDKGenerator/Il2cpp.h
           # keep the wildcard *.c* in Android.mk from compiling the .bak copy
           rm -f /tmp/vmbuild/jni/Main.cpp.bak
           if ! "$NDK/ndk-build" -j4 \
